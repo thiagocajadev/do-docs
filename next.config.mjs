@@ -1,10 +1,12 @@
 const basePath = process.env.BASE_PATH || ''
 const distDir = process.env.DIST_DIR || undefined
 const output = process.env.OUTPUT || undefined
+const staticPageGenerationTimeout = Number(process.env.STATIC_PAGE_GENERATION_TIMEOUT) || 60
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
+  staticPageGenerationTimeout,
   images: {
     // domains: ['codesandbox.io'],
     unoptimized: true,
