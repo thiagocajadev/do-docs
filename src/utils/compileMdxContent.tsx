@@ -46,6 +46,7 @@ import { rehypeToc } from '@/components/mdx/Toc/rehypeToc'
 import type { DocToC } from '@/app/[...slug]/DocsContext'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import { dirname } from 'node:path'
+import { refractor } from 'refractor/all'
 import rehypePrismPlus from 'rehype-prism-plus'
 import remarkGFM from 'remark-gfm'
 
@@ -90,7 +91,7 @@ export async function compileMdxContent(
           rehypeSummary,
           rehypeGha,
           rehypeMermaid(),
-          rehypePrismPlus,
+          [rehypePrismPlus, { refractor, ignoreMissing: true }],
           rehypeCode(),
           rehypeToc(tableOfContents, url, title),
           rehypeSandpack(dirname(absoluteFilePath)),
