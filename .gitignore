@@ -15,6 +15,7 @@ node_modules/
 
 # other
 .next/
+next-env.d.ts
 .DS_Store
 .secrets
 tmp/api-backup
