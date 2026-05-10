@@ -168,6 +168,17 @@ mark {
 
 @import 'prism-themes/themes/prism-one-dark.css';
 
+/* Binaryify One Dark Pro tweak: red variables/parameters (instead of blue) */
+.token.variable,
+.token.parameter {
+  color: #e06c75;
+}
+
+/* Class-like identifiers in yellow */
+.token.maybe-class-name {
+  color: #e5c07b;
+}
+
 /* Inline code */
 :not(pre) > code[class*='language-'] {
   @apply rounded-lg;
