@@ -23,6 +23,9 @@ if [ "$IS_EXPORT" = "true" ]; then
   mv src/app/api tmp/api-backup
 fi
 
+# Copy images/SVGs from $MDX into public/$MDX_BASEURL/ so they're served as static assets
+sh scripts/copy-mdx-assets.sh
+
 # Run Next.js build
 next build
 STATUS=$?

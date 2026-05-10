@@ -102,7 +102,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const primary = process.env.THEME_PRIMARY || '#323e48'
+  const primary = process.env.THEME_PRIMARY || '#1f6feb'
   const note = process.env.THEME_NOTE || '#1f6feb'
   const tip = process.env.THEME_TIP || '#238636'
   const important = process.env.THEME_IMPORTANT || '#8957e5'

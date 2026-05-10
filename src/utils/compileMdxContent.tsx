@@ -21,6 +21,7 @@ import {
 } from '@/components/mdx'
 import { Code } from '@/components/mdx/Code'
 import { rehypeCode } from '@/components/mdx/Code/rehypeCode'
+import { rehypeCodeFallback } from '@/components/mdx/Code/rehypeCodeFallback'
 import { Codesandbox } from '@/components/mdx/Codesandbox'
 import { Details } from '@/components/mdx/Details'
 import { rehypeDetails } from '@/components/mdx/Details/rehypeDetails'
@@ -96,6 +97,7 @@ export async function compileMdxContent(
           rehypeSummary,
           rehypeGha,
           rehypeMermaid(),
+          rehypeCodeFallback, // bare ``` blocks → language-javascript before prism highlights
           [rehypePrismPlus, { refractor, ignoreMissing: true }],
           rehypeCode(),
           rehypeToc(tableOfContents, url, title),

@@ -72,7 +72,7 @@ export const th = (props: ComponentProps<'th'>) => (
   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide" {...props} />
 )
 
-export const tr = (props: ComponentProps<'tr'>) => <tr className="even:bg-surface" {...props} />
+export const tr = (props: ComponentProps<'tr'>) => <tr className="odd:bg-surface" {...props} />
 
 export const td = (props: ComponentProps<'td'>) => (
   <td className="px-6 py-4 text-sm first:font-medium" {...props} />
