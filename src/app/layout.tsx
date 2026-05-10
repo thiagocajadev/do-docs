@@ -133,6 +133,7 @@ export default function RootLayout({
       <body className="wrap-break-word bg-surface text-on-surface">
         <Mcu
           source={primary}
+          primary={primary}
           scheme={scheme}
           contrast={contrast}
           customColors={[

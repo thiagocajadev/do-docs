@@ -65,7 +65,7 @@ export const table = (props: ComponentProps<'table'>) => (
 )
 
 export const thead = (props: ComponentProps<'thead'>) => (
-  <thead className="text-on-surface-variant/50" {...props} />
+  <thead className="bg-surface-container-high text-on-surface-variant/70" {...props} />
 )
 
 export const th = (props: ComponentProps<'th'>) => (

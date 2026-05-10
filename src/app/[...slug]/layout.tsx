@@ -4,6 +4,7 @@ import { Layout, LayoutAside, LayoutContent, LayoutHeader, LayoutNav } from '@/c
 import { Nav } from '@/components/Nav'
 import Search from '@/components/Search'
 import { Toc } from '@/components/mdx/Toc'
+import { ToggleTheme } from '@/components/ToggleTheme'
 import cn from '@/lib/cn'
 import { getData } from '@/utils/docs'
 import Link from 'next/link'
@@ -78,7 +79,7 @@ export default async function Layoutt({ params, children }: Props) {
             )}
           </React.Fragment>
         ))}
-        {/* <ToggleTheme className="hidden size-9 items-center justify-center sm:flex" /> */}
+        <ToggleTheme className="hidden size-9 items-center justify-center lg:flex" />
 
         <Menu className="z-100 bg-surface absolute inset-0 top-(--header-height) h-[calc(100dvh-var(--header-height))] w-full overflow-auto lg:hidden">
           <Nav docs={docs} asPath={asPath} collapsible={false} />
