@@ -25,7 +25,10 @@ export function ToggleTheme({ className }: { className?: string }) {
       onClick={() => setTheme(next)}
       aria-label={LABEL[current]}
       title={LABEL[current]}
-      className={cn(className)}
+      className={cn(
+        'cursor-pointer text-on-surface-variant transition-colors hover:text-on-surface',
+        className,
+      )}
     >
       <Icon />
     </button>

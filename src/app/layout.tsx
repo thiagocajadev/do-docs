@@ -78,6 +78,10 @@ if (process.env.ICON) {
       url: `data:image/svg+xml,${encodeURIComponent(svg(process.env.ICON))}`,
     })
   }
+} else {
+  icon.push({
+    url: `data:image/svg+xml,${encodeURIComponent(svg('📘'))}`,
+  })
 }
 
 export const metadata: Metadata = {
