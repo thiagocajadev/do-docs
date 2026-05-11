@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Layout, LayoutAside, LayoutContent, LayoutHeader, LayoutNav } from '@/components/Layout'
 import { Nav } from '@/components/Nav'
 import { buildNavTree, flattenNavTree } from '@/components/Nav/buildNavTree'
+import { ScrollToTopOnNavigate } from '@/components/ScrollToTopOnNavigate'
 import Search from '@/components/Search'
 import { Toc } from '@/components/mdx/Toc'
 import { ToggleTheme } from '@/components/ToggleTheme'
@@ -204,6 +205,7 @@ export default async function Layoutt({ params, children }: Props) {
   return (
     <>
       <DocsContext value={{ docs, doc }}>
+        <ScrollToTopOnNavigate />
         <Layout className="[--side-w:--spacing(72)]">
           <LayoutHeader className="z-10 border-b border-outline-variant/50 bg-surface/95 backdrop-blur-xl">
             {header}
