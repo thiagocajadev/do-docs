@@ -1,17 +1,22 @@
 #!/bin/sh
 #
-# Copy images/SVGs from $MDX (source docs folder) into public/$MDX_BASEURL/,
-# mirroring the relative path layout. This makes <img src="..."> resolved by
-# rehypeImg point at real files served by Next.js.
+# Copy images/SVGs into public/ so the Next.js static export serves them.
+#
+# Two sources are mirrored:
+#   1. $MDX/**          (images inside the docs folder)        → public/<rel>
+#   2. $MDX/../assets/  (sibling "assets" folder, optional)    → public/assets/
+#
+# Image src in MDX is rewritten by rehypeImg into an absolute path under
+# BASE_PATH (see resolveMdxUrl), so files must live at the matching location
+# inside public/.
 #
 # Required env:
-#   MDX          absolute path to the docs folder (where .md/.mdx live)
-#   MDX_BASEURL  URL prefix used by the docs build (e.g. /docs)
+#   MDX  absolute or relative path to the docs folder
 
 set -e
 
-if [ -z "$MDX" ] || [ -z "$MDX_BASEURL" ]; then
-  echo "copy-mdx-assets: MDX and MDX_BASEURL must be set, skipping"
+if [ -z "$MDX" ]; then
+  echo "copy-mdx-assets: MDX must be set, skipping"
   exit 0
 fi
 
@@ -20,17 +25,11 @@ if [ ! -d "$MDX" ]; then
   exit 0
 fi
 
-# Strip leading slash from MDX_BASEURL for the destination path
-DEST_PREFIX=$(echo "$MDX_BASEURL" | sed 's|^/||')
-DEST_DIR="public/$DEST_PREFIX"
+DEST_DIR="public"
+mkdir -p "$DEST_DIR"
 
 echo "Copying MDX assets from $MDX → $DEST_DIR"
 
-mkdir -p "$DEST_DIR"
-
-# Find images/SVGs and copy preserving directory structure.
-# Patterns: png jpg jpeg gif webp avif svg ico
-COUNT=0
 find "$MDX" -type f \( \
     -iname '*.png' -o \
     -iname '*.jpg' -o \
@@ -45,7 +44,26 @@ find "$MDX" -type f \( \
   DEST="$DEST_DIR/$REL"
   mkdir -p "$(dirname "$DEST")"
   cp "$SRC" "$DEST"
-  COUNT=$((COUNT + 1))
 done
+
+SIBLING_ASSETS="$(dirname "$MDX")/assets"
+if [ -d "$SIBLING_ASSETS" ]; then
+  echo "Copying sibling assets from $SIBLING_ASSETS → $DEST_DIR/assets"
+  find "$SIBLING_ASSETS" -type f \( \
+      -iname '*.png' -o \
+      -iname '*.jpg' -o \
+      -iname '*.jpeg' -o \
+      -iname '*.gif' -o \
+      -iname '*.webp' -o \
+      -iname '*.avif' -o \
+      -iname '*.svg' -o \
+      -iname '*.ico' \
+    \) | while read -r SRC; do
+    REL=${SRC#"$SIBLING_ASSETS"/}
+    DEST="$DEST_DIR/assets/$REL"
+    mkdir -p "$(dirname "$DEST")"
+    cp "$SRC" "$DEST"
+  done
+fi
 
 echo "✓ MDX assets copied"

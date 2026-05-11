@@ -92,7 +92,7 @@ export async function compileMdxContent(
           // skip for .mdx since rehype-raw chokes on MDX JSX nodes
           ...(isMdx ? [] : [rehypeRaw]),
           rehypeLink(process.env.BASE_PATH),
-          rehypeImg(relFilePath, baseUrl),
+          rehypeImg(relFilePath, baseUrl, process.env.BASE_PATH),
           rehypeDetails,
           rehypeSummary,
           rehypeGha,

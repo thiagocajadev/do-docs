@@ -34,7 +34,32 @@ export function buildNavTree(docs: Doc[]): NavTreeNode[] {
     }
   }
 
+  sortTree(root)
   return root.children
+}
+
+function isFolder(node: NavTreeNode): boolean {
+  return node.children.length > 0 || !!node.indexDoc
+}
+
+function sortTree(node: NavTreeNode): void {
+  node.children.sort((a, b) => {
+    const af = isFolder(a) ? 1 : 0
+    const bf = isFolder(b) ? 1 : 0
+    return af - bf
+  })
+  for (const child of node.children) sortTree(child)
+}
+
+export function flattenNavTree(tree: NavTreeNode[]): Doc[] {
+  const out: Doc[] = []
+  const visit = (node: NavTreeNode) => {
+    if (node.indexDoc) out.push(node.indexDoc)
+    if (node.doc) out.push(node.doc)
+    for (const child of node.children) visit(child)
+  }
+  for (const node of tree) visit(node)
+  return out
 }
 
 export function nodeContainsUrl(node: NavTreeNode, url: string): boolean {

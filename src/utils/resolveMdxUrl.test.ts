@@ -113,8 +113,22 @@ describe('resolveMdxUrl', () => {
   })
 
   describe('without baseUrl', () => {
-    it('returns the src unchanged when baseUrl is not provided', () => {
-      expect(resolveMdxUrl('dog.png', '/getting-started/tutorials/store.mdx')).toBe('dog.png')
+    it('resolves relative src to absolute path', () => {
+      expect(resolveMdxUrl('dog.png', '/getting-started/tutorials/store.mdx')).toBe(
+        '/getting-started/tutorials/dog.png',
+      )
+    })
+
+    it('resolves parent traversal that escapes mdFile root', () => {
+      expect(resolveMdxUrl('../../../assets/dog.png', '/shared/process/ci-cd.md')).toBe(
+        '/assets/dog.png',
+      )
+    })
+
+    it('applies basePath when provided', () => {
+      expect(
+        resolveMdxUrl('../../../assets/dog.png', '/shared/process/ci-cd.md', undefined, '/code-style'),
+      ).toBe('/code-style/assets/dog.png')
     })
 
     it('returns fully qualified URL unchanged when baseUrl is not provided', () => {

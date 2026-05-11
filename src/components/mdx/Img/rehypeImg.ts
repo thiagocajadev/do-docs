@@ -46,33 +46,24 @@ import { visit } from 'unist-util-visit'
 export function rehypeImg(
   relFilePath: Parameters<typeof resolveMdxUrl>[1],
   MDX_BASEURL: Parameters<typeof resolveMdxUrl>[2],
+  BASE_PATH?: Parameters<typeof resolveMdxUrl>[3],
 ) {
   return () => (tree: Root) => {
     visit(tree, null, function (node) {
-      // console.log('node', node)
-
       const isMDImage = 'tagName' in node && node.tagName === 'img'
       const isHTMLImage = 'name' in node && node.name === 'img'
 
       if (isMDImage) {
-        node.tagName = 'Img' // map to <Img> React component
-
-        //
-        // Resolve relative URLs
-        //
+        node.tagName = 'Img'
 
         const oldSrc = node.properties.src
         if (typeof oldSrc === 'string') {
-          node.properties.src = resolveMdxUrl(oldSrc, relFilePath, MDX_BASEURL)
+          node.properties.src = resolveMdxUrl(oldSrc, relFilePath, MDX_BASEURL, BASE_PATH)
         }
       }
 
       if (isHTMLImage) {
-        node.name = 'Img' // map to <Img> React component
-
-        //
-        // Resolve relative URLs
-        //
+        node.name = 'Img'
 
         const srcAttr = node.attributes
           .filter((node) => 'name' in node)
@@ -82,7 +73,7 @@ export function rehypeImg(
           const oldSrc = srcAttr?.value
 
           if (typeof oldSrc === 'string')
-            srcAttr.value = resolveMdxUrl(oldSrc, relFilePath, MDX_BASEURL)
+            srcAttr.value = resolveMdxUrl(oldSrc, relFilePath, MDX_BASEURL, BASE_PATH)
         }
       }
     })

@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Layout, LayoutAside, LayoutContent, LayoutHeader, LayoutNav } from '@/components/Layout'
 import { Nav } from '@/components/Nav'
+import { buildNavTree, flattenNavTree } from '@/components/Nav/buildNavTree'
 import Search from '@/components/Search'
 import { Toc } from '@/components/mdx/Toc'
 import { ToggleTheme } from '@/components/ToggleTheme'
@@ -24,10 +25,14 @@ export default async function Layoutt({ params, children }: Props) {
 
   const asPath = slug.join('/')
 
-  const currentPageIndex = docs.findIndex(({ url }) => url === `/${asPath}`)
-  const currentPage = docs[currentPageIndex]
-  const previousPage = currentPageIndex > 0 && docs[currentPageIndex - 1]
-  const nextPage = currentPageIndex < docs.length - 1 && docs[currentPageIndex + 1]
+  const orderedDocs = flattenNavTree(buildNavTree(docs))
+  const currentPageIndex = orderedDocs.findIndex(({ url }) => url === `/${asPath}`)
+  const currentPage = orderedDocs[currentPageIndex]
+  const previousPage = currentPageIndex > 0 && orderedDocs[currentPageIndex - 1]
+  const nextPage =
+    currentPageIndex >= 0 &&
+    currentPageIndex < orderedDocs.length - 1 &&
+    orderedDocs[currentPageIndex + 1]
 
   const NEXT_PUBLIC_LIBNAME = process.env.NEXT_PUBLIC_LIBNAME
   const NEXT_PUBLIC_LIBNAME_SHORT = process.env.NEXT_PUBLIC_LIBNAME_SHORT
@@ -37,7 +42,7 @@ export default async function Layoutt({ params, children }: Props) {
   const nav = <Nav docs={docs} asPath={asPath} collapsible />
   const header = (
     <div className="flex h-(--header-height) items-center gap-(--rgrid-m) px-(--rgrid-m)">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Link href="/" aria-label={`${NEXT_PUBLIC_LIBNAME} Docs`}>
           <span className="font-bold">
             {NEXT_PUBLIC_LIBNAME_SHORT && (
@@ -49,8 +54,8 @@ export default async function Layoutt({ params, children }: Props) {
           </span>
         </Link>
         {NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL ? (
-          <span className="font-normal">
-            {' · '}
+          <span className="font-normal flex items-center gap-2">
+            <span aria-hidden>·</span>
             {NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF ? (
               <a href={NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF}>{NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL}</a>
             ) : (
@@ -82,6 +87,19 @@ export default async function Layoutt({ params, children }: Props) {
         <ToggleTheme className="hidden size-9 items-center justify-center lg:flex" />
 
         <Menu className="z-100 bg-surface absolute inset-0 top-(--header-height) h-[calc(100dvh-var(--header-height))] w-full overflow-auto lg:hidden">
+          <div className="flex items-center gap-2 border-b border-outline-variant/50 px-(--rgrid-m) py-2">
+            {process.env.GITHUB && (
+              <Link
+                href={process.env.GITHUB}
+                className="flex size-9 items-center justify-center"
+                target="_blank"
+                aria-label="GitHub"
+              >
+                <VscGithubAlt />
+              </Link>
+            )}
+            <ToggleTheme className="flex size-9 items-center justify-center" />
+          </div>
           <Nav docs={docs} asPath={asPath} collapsible={false} />
         </Menu>
       </div>

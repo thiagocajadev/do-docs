@@ -17,6 +17,7 @@ export function Menu({ children, ...props }: ComponentProps<typeof Dialog.Conten
       <Dialog.Content {...props}>
         <VisuallyHidden.Root>
           <Dialog.Title>Menu</Dialog.Title>
+          <Dialog.Description>Navegação do site</Dialog.Description>
         </VisuallyHidden.Root>
         {children}
       </Dialog.Content>
