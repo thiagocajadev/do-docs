@@ -5,7 +5,7 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import Link from 'next/link'
 import { ComponentProps, useEffect, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
-import { NavTreeNode, nodeFirstHref } from './buildNavTree'
+import { NavTreeNode, nodeContainsUrl, nodeFirstHref } from './buildNavTree'
 
 export function NavCategoryCollapsible({
   node,
@@ -20,8 +20,13 @@ export function NavCategoryCollapsible({
   const hasChildren = node.children.length > 0
   const href = node.doc?.url ?? node.indexDoc?.url ?? nodeFirstHref(node) ?? '#'
   const active = node.doc?.url === currentUrl || node.indexDoc?.url === currentUrl
+  const containsCurrent = nodeContainsUrl(node, currentUrl)
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(containsCurrent)
+
+  useEffect(() => {
+    if (containsCurrent) setOpen(true)
+  }, [containsCurrent])
 
   useEffect(() => {
     const dur = '.2s'
@@ -36,6 +41,7 @@ export function NavCategoryCollapsible({
       href={href}
       depth={depth}
       active={active}
+      onClick={hasChildren ? () => setOpen(true) : undefined}
       className={cn(
         isFolder ? 'capitalize tracking-wide' : 'text-xs',
         depth === 0 && isFolder && 'font-semibold',
