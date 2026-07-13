@@ -48,9 +48,7 @@ export default async function Layoutt({ params, children }: Props) {
   const NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL = process.env.NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL
   const NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF = process.env.NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF
 
-  const nav = (
-    <Nav docs={docs} asPath={asPath} collapsible navOrder={navOrder} navLabels={navLabels} />
-  )
+  const nav = <Nav docs={docs} asPath={asPath} navOrder={navOrder} navLabels={navLabels} />
   const header = (
     <div className="flex h-(--header-height) items-center gap-(--rgrid-m) px-(--rgrid-m)">
       <div className="flex items-center gap-2">
@@ -111,13 +109,7 @@ export default async function Layoutt({ params, children }: Props) {
             )}
             <ToggleTheme className="flex size-9 items-center justify-center" />
           </div>
-          <Nav
-            docs={docs}
-            asPath={asPath}
-            collapsible={false}
-            navOrder={navOrder}
-            navLabels={navLabels}
-          />
+          <div className="pb-8 pt-4">{nav}</div>
         </Menu>
       </div>
     </div>

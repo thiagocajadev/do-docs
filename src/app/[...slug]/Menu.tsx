@@ -2,12 +2,17 @@
 
 import * as Dialog from '@radix-ui/react-dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { ComponentProps, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { ComponentProps, useEffect, useState } from 'react'
 
 import { Burger } from './Burger'
 
 export function Menu({ children, ...props }: ComponentProps<typeof Dialog.Content>) {
   const [opened, setOpened] = useState(false)
+
+  // The dialog stays mounted across route changes, so closing it is on us.
+  const pathname = usePathname()
+  useEffect(() => setOpened(false), [pathname])
 
   return (
     <Dialog.Root open={opened} onOpenChange={setOpened}>

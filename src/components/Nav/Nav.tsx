@@ -3,20 +3,17 @@ import cn from '@/lib/cn'
 import type { NavGroup } from '@/utils/navOrder'
 import * as React from 'react'
 import { buildNavSections } from './buildNavTree'
-import { NavCategory } from './NavCategory'
 import { NavCategoryCollapsible } from './NavCategoryCollapsible'
 
 export function Nav({
   className,
   docs,
   asPath,
-  collapsible = true,
   navOrder,
   navLabels,
 }: React.ComponentProps<'div'> & {
   docs: DocEntry[]
   asPath: string
-  collapsible: boolean
   navOrder?: NavGroup[]
   navLabels?: Record<string, string>
 }) {
@@ -45,11 +42,7 @@ export function Nav({
           <ul>
             {section.nodes.map((node) => (
               <li key={node.name}>
-                {collapsible ? (
-                  <NavCategoryCollapsible node={node} asPath={asPath} depth={0} />
-                ) : (
-                  <NavCategory node={node} asPath={asPath} depth={0} />
-                )}
+                <NavCategoryCollapsible node={node} asPath={asPath} depth={0} />
               </li>
             ))}
           </ul>
