@@ -13,7 +13,7 @@ import { parseNavLabels, parseNavOrder } from '@/utils/navOrder'
 import Link from 'next/link'
 import { PiDiscordLogoLight } from 'react-icons/pi'
 import { VscGithubAlt } from 'react-icons/vsc'
-import { DocsContext } from './DocsContext'
+import { type DocEntry } from './DocsContext'
 import { Menu } from './Menu'
 
 export type Props = {
@@ -23,7 +23,11 @@ export type Props = {
 
 export default async function Layoutt({ params, children }: Props) {
   const { slug } = await params
-  const { docs, doc } = await getData(...slug)
+  const { docs: fullDocs, doc } = await getData(...slug)
+
+  // The nav is a client component, so it only gets what it reads. See DocEntry: passing
+  // the docs as-is would serialize the whole corpus into every exported page.
+  const docs: DocEntry[] = fullDocs.map(({ content, tableOfContents, ...entry }) => entry)
 
   const asPath = slug.join('/')
 
@@ -72,7 +76,7 @@ export default async function Layoutt({ params, children }: Props) {
         ) : null}
       </div>
 
-      <Search className="grow" />
+      <Search className="grow" indexUrl={`${process.env.BASE_PATH ?? ''}/search-index.json`} />
 
       <div className="flex">
         {[
@@ -216,22 +220,20 @@ export default async function Layoutt({ params, children }: Props) {
 
   return (
     <>
-      <DocsContext value={{ docs, doc }}>
-        <ScrollToTopOnNavigate />
-        <Layout className="[--side-w:--spacing(72)]">
-          <LayoutHeader className="z-10 border-b border-outline-variant/50 bg-surface/95 backdrop-blur-xl">
-            {header}
-          </LayoutHeader>
-          <LayoutContent className="lg:mr-(--rgrid-m) xl:mr-0">
-            <article className="post-container">
-              {children}
-              {footer}
-            </article>
-          </LayoutContent>
-          <LayoutNav className="pt-8">{nav}</LayoutNav>
-          <LayoutAside className="pt-8">{toc}</LayoutAside>
-        </Layout>
-      </DocsContext>
+      <ScrollToTopOnNavigate />
+      <Layout className="[--side-w:--spacing(72)]">
+        <LayoutHeader className="z-10 border-b border-outline-variant/50 bg-surface/95 backdrop-blur-xl">
+          {header}
+        </LayoutHeader>
+        <LayoutContent className="lg:mr-(--rgrid-m) xl:mr-0">
+          <article className="post-container">
+            {children}
+            {footer}
+          </article>
+        </LayoutContent>
+        <LayoutNav className="pt-8">{nav}</LayoutNav>
+        <LayoutAside className="pt-8">{toc}</LayoutAside>
+      </Layout>
     </>
   )
 }

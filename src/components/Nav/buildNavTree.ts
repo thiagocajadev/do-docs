@@ -1,4 +1,4 @@
-import { Doc } from '@/app/[...slug]/DocsContext'
+import { DocEntry } from '@/app/[...slug]/DocsContext'
 import type { NavGroup, NavItem } from '@/utils/navOrder'
 
 export const INDEX_PAGE = 'introduction'
@@ -7,8 +7,8 @@ export type NavTreeNode = {
   name: string
   /** Display name, when the slug alone doesn't capitalize nicely (`sql` -> `SQL`) */
   label?: string
-  doc?: Doc
-  indexDoc?: Doc
+  doc?: DocEntry
+  indexDoc?: DocEntry
   children: NavTreeNode[]
 }
 
@@ -17,7 +17,7 @@ export type NavSection = {
   nodes: NavTreeNode[]
 }
 
-export function buildNavTree(docs: Doc[]): NavTreeNode[] {
+export function buildNavTree(docs: DocEntry[]): NavTreeNode[] {
   const root: NavTreeNode = { name: '', children: [] }
 
   for (const doc of docs) {
@@ -95,7 +95,7 @@ function applyLabels(nodes: NavTreeNode[], navLabels: Record<string, string>): v
  * config keep their default order, after the ones that were listed.
  */
 export function buildNavSections(
-  docs: Doc[],
+  docs: DocEntry[],
   navOrder: NavGroup[] = [],
   navLabels: Record<string, string> = {},
 ): NavSection[] {
@@ -117,12 +117,12 @@ export function buildNavSections(
   return sections
 }
 
-export function flattenNavSections(sections: NavSection[]): Doc[] {
+export function flattenNavSections(sections: NavSection[]): DocEntry[] {
   return sections.flatMap(({ nodes }) => flattenNavTree(nodes))
 }
 
-export function flattenNavTree(tree: NavTreeNode[]): Doc[] {
-  const out: Doc[] = []
+export function flattenNavTree(tree: NavTreeNode[]): DocEntry[] {
+  const out: DocEntry[] = []
   const visit = (node: NavTreeNode) => {
     if (node.indexDoc) out.push(node.indexDoc)
     if (node.doc) out.push(node.doc)

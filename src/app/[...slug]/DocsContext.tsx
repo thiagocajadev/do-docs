@@ -34,7 +34,17 @@ export type Doc = {
   tableOfContents: DocToC[]
 }
 
-export type Ctx = { docs: Doc[]; doc: Doc }
+/**
+ * A doc reduced to what the nav needs.
+ *
+ * Anything handed to a client component is serialized into every exported page, so the
+ * two heavy fields are dropped: `content` (the compiled MDX tree) and `tableOfContents`
+ * (the search corpus, now served once from search-index.json). Carrying either would
+ * embed the whole corpus in each page -- cost as pages x corpus, gigabytes at our size.
+ */
+export type DocEntry = Omit<Doc, 'content' | 'tableOfContents'>
+
+export type Ctx = { docs: DocEntry[]; doc: DocEntry }
 
 const [hook, Provider] = createRequiredContext<Ctx>()
 

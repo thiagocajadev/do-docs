@@ -1,4 +1,4 @@
-import { Doc } from '@/app/[...slug]/DocsContext'
+import { DocEntry } from '@/app/[...slug]/DocsContext'
 import cn from '@/lib/cn'
 import type { NavGroup } from '@/utils/navOrder'
 import * as React from 'react'
@@ -14,7 +14,7 @@ export function Nav({
   navOrder,
   navLabels,
 }: React.ComponentProps<'div'> & {
-  docs: Doc[]
+  docs: DocEntry[]
   asPath: string
   collapsible: boolean
   navOrder?: NavGroup[]

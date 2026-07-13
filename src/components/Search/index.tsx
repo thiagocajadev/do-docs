@@ -10,7 +10,10 @@ import { useKeyPress } from '@/hooks/useKeyPress'
 
 import { SearchModalContainer } from './SearchModalContainer'
 
-function Search({ className }: ComponentProps<typeof Dialog.Trigger>) {
+function Search({
+  className,
+  indexUrl,
+}: ComponentProps<typeof Dialog.Trigger> & { indexUrl: string }) {
   const [showSearchModal, setShowSearchModal] = useState(false)
   const slashPressed = useKeyPress('Slash')
 
@@ -39,6 +42,7 @@ function Search({ className }: ComponentProps<typeof Dialog.Trigger>) {
           <SearchModalContainer
             className="relative mx-auto max-w-3xl rounded-md px-4 shadow-sm [--Search-Input-top:--spacing(8)] lg:[--Search-Input-top:--spacing(24)]"
             close={() => setShowSearchModal(false)}
+            indexUrl={indexUrl}
           />
         </Dialog.Content>
       </Dialog.Portal>

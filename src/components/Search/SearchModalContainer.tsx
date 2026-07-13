@@ -1,8 +1,6 @@
 import { matchSorter } from 'match-sorter'
 import * as React from 'react'
 
-import { useDocs } from '@/app/[...slug]/DocsContext'
-
 import cn from '@/lib/cn'
 import { escape } from '@/utils/text'
 import { Command } from 'cmdk'
@@ -14,41 +12,42 @@ import SearchItem from './SearchItem'
 export const SearchModalContainer = ({
   className,
   close,
-}: ComponentProps<'search'> & { close: () => void }) => {
+  indexUrl,
+}: ComponentProps<'search'> & { close: () => void; indexUrl: string }) => {
   const router = useRouter()
-  const { docs } = useDocs()
   const [query, setQuery] = React.useState('')
   const deferredQuery = React.useDeferredValue(query)
   const [results, setResults] = React.useState<SearchResult[]>([])
 
+  // Fetched rather than served from context: see search-index.json/route.ts. The modal
+  // only mounts once opened, so this costs nothing until the user searches.
+  const [index, setIndex] = React.useState<SearchResult[]>([])
+
+  React.useEffect(() => {
+    let cancelled = false
+
+    fetch(indexUrl)
+      .then((res) => res.json())
+      .then((entries: SearchResult[]) => {
+        if (!cancelled) setIndex(entries)
+      })
+      .catch(() => {})
+
+    return () => {
+      cancelled = true
+    }
+  }, [indexUrl])
+
   React.useEffect(() => {
     React.startTransition(() => {
       if (!deferredQuery) return setResults([])
-      // console.log('deferredQuery', deferredQuery)
 
       // Get length of matched text in result
       const relevanceOf = (result: SearchResult) =>
         (result.title.toLowerCase().match(escape(deferredQuery.toLowerCase()))?.length ?? 0) /
         result.title.length
 
-      // Search
-      let candidateResults = docs.flatMap(
-        ({ tableOfContents }) => tableOfContents,
-      ) satisfies SearchResult[]
-      // console.log('candidateResults', candidateResults)
-      // candidateResults = candidateResults.filter((entry) => entry.description.length > 0)
-      // .concat(
-      //   Object.entries(boxes).flatMap(([id, data]) => ({
-      //     ...data,
-      //     label: 'codesandbox.io',
-      //     description: data.description ?? '',
-      //     content: data.content ?? '',
-      //     url: `https://codesandbox.io/s/${id}`,
-      //     image: data?.screenshot_url,
-      //   }))
-      // )
-
-      const results = matchSorter(candidateResults, deferredQuery, {
+      const results = matchSorter(index, deferredQuery, {
         keys: ['title', 'description', 'content'],
         threshold: matchSorter.rankings.CONTAINS,
       })
@@ -59,7 +58,7 @@ export const SearchModalContainer = ({
 
       setResults(results)
     })
-  }, [docs, deferredQuery])
+  }, [index, deferredQuery])
 
   return (
     <search
