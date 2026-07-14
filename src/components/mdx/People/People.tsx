@@ -3,7 +3,6 @@ import { initials } from '@/utils/text'
 import { Octokit } from '@octokit/core'
 import Image from 'next/image'
 import { cache, ComponentProps } from 'react'
-import backerBadge from './backer-badge.svg'
 
 //  ██████  ██████  ███    ██ ████████ ██████  ██ ██████  ██    ██ ████████  ██████  ██████  ███████
 // ██      ██    ██ ████   ██    ██    ██   ██ ██ ██   ██ ██    ██    ██    ██    ██ ██   ██ ██
@@ -56,68 +55,6 @@ async function fetchContributors(owner: string, repo: string) {
   return res.data
 }
 const cachedFetchContributors = cache(fetchContributors)
-
-// ██████   █████   ██████ ██   ██ ███████ ██████  ███████
-// ██   ██ ██   ██ ██      ██  ██  ██      ██   ██ ██
-// ██████  ███████ ██      █████   █████   ██████  ███████
-// ██   ██ ██   ██ ██      ██  ██  ██      ██   ██      ██
-// ██████  ██   ██  ██████ ██   ██ ███████ ██   ██ ███████
-
-export async function Backers({
-  repo,
-  limit = 50,
-  className,
-  ...props
-}: ComponentProps<'ul'> & {
-  repo: string
-  limit: number
-}) {
-  const backers = (await fetchBackers(repo)).slice(0, limit)
-
-  return (
-    <div>
-      <ul className={cn('flex flex-wrap gap-1', className)} {...props}>
-        {backers.map((backer) => (
-          <li key={backer.name}>
-            <Avatar profileUrl={backer.profile} imageUrl={backer.image} name={backer.name} />
-          </li>
-        ))}
-      </ul>
-      <p>
-        <a
-          href={`https://opencollective.com/${repo}#backers`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image src={backerBadge} alt="Backer" />
-        </a>
-      </p>
-    </div>
-  )
-}
-
-async function fetchBackers(repo: string) {
-  const res = await fetch(`https://opencollective.com/${repo}/members/users.json`)
-  const backers: {
-    profile: string
-    name: string
-    image: string
-    totalAmountDonated: number
-  }[] = await res.json()
-
-  const backersMap = new Map(backers.map((backer) => [backer.name, backer]))
-  backersMap.forEach((backer) => {
-    const existingBacker = backersMap.get(backer.name)
-    if (existingBacker && backer.totalAmountDonated >= existingBacker.totalAmountDonated) {
-      backersMap.set(backer.name, backer) // replace with the backer with the highest donation
-    }
-  })
-  const uniqueBackers = Array.from(backersMap.values())
-
-  return uniqueBackers.sort((a, b) => b.totalAmountDonated - a.totalAmountDonated)
-}
-
-const cachedFetchBackers = cache(fetchBackers)
 
 //
 // common

@@ -7,7 +7,6 @@ import { ThemeProvider } from 'next-themes'
 import localFont from 'next/font/local'
 import { Mcu } from 'react-mcu'
 import './globals.css'
-import { SandpackCSS } from './sandpack-styles'
 
 const inter = localFont({
   src: [
@@ -133,7 +132,6 @@ export default function RootLayout({
       <head>
         <link rel="alternate" type="text/plain" href={`${basePath}/llms.txt`} />
         <link rel="alternate" type="text/plain" href={`${basePath}/llms-full.txt`} />
-        <SandpackCSS />
       </head>
       <body className="wrap-break-word bg-surface text-on-surface">
         <Mcu

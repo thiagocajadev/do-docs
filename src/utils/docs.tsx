@@ -1,9 +1,7 @@
 import type { Doc, DocToC } from '@/app/[...slug]/DocsContext'
-import { rehypeCodesandbox } from '@/components/mdx/Codesandbox/rehypeCodesandbox'
 import { compileMdxContent, compileMdxFrontmatter } from '@/utils/compileMdxContent'
 import resolveMdxUrl from '@/utils/resolveMdxUrl'
 import matter from 'gray-matter'
-import { compileMDX } from 'next-mdx-remote/rsc'
 import fs from 'node:fs'
 import { cache } from 'react'
 
@@ -87,10 +85,6 @@ async function _getDocs(
   slugOfInterest: string[] | null,
   slugOnly = false,
 ): Promise<Doc[]> {
-  //
-  // 1st pass for `entries` - using shared parseDocsMetadata
-  //
-
   const parsedDocs = await parseDocsMetadata(root)
 
   const entries = await Promise.all(
@@ -101,31 +95,13 @@ async function _getDocs(
       const compiledTitle = await compileMdxFrontmatter(title)
       const titleJsx = compiledTitle.content
 
-      const boxes: string[] = []
-
-      // Sanitize markdown
-      const sanitizedContent = content
-        // Remove inline link syntax
-        .replace(INLINE_LINK_REGEX, '$1')
-
-      await compileMDX({
-        source: sanitizedContent,
-        options: {
-          mdxOptions: {
-            format: file.endsWith('.mdx') ? 'mdx' : 'md',
-            rehypePlugins: [
-              rehypeCodesandbox(boxes), // 1. put all Codesandbox[id] into `boxes`
-            ],
-          },
-        },
-      })
+      const sanitizedContent = content.replace(INLINE_LINK_REGEX, '$1')
 
       return {
         slug,
         url,
         title: titleJsx,
         titleRaw: title, // Keep raw string for metadata
-        boxes,
         //
         file,
         content: sanitizedContent,
@@ -135,10 +111,6 @@ async function _getDocs(
   )
   // console.log('entries', entries)
 
-  //
-  // 2nd pass for `docs`
-  //
-
   const docs = await Promise.all(
     entries.map(
       async ({
@@ -146,8 +118,6 @@ async function _getDocs(
         url,
         title,
         titleRaw,
-        boxes,
-        // Passed from the 1st pass
         file,
         content,
         frontmatter,
@@ -245,7 +215,6 @@ async function _getDocs(
           image,
           nav,
           content: contentJsx,
-          boxes,
           tableOfContents,
         }
       },

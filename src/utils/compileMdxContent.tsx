@@ -22,13 +22,11 @@ import {
 import { Code } from '@/components/mdx/Code'
 import { rehypeCode } from '@/components/mdx/Code/rehypeCode'
 import { rehypeCodeFallback } from '@/components/mdx/Code/rehypeCodeFallback'
-import { Codesandbox } from '@/components/mdx/Codesandbox'
 import { Details } from '@/components/mdx/Details'
 import { rehypeDetails } from '@/components/mdx/Details/rehypeDetails'
 import { Entries, type Entry } from '@/components/mdx/Entries'
 import { Gha } from '@/components/mdx/Gha'
 import { rehypeGha } from '@/components/mdx/Gha/rehypeGha'
-import { Grid } from '@/components/mdx/Grid'
 import { Hint } from '@/components/mdx/Hint'
 import { Img } from '@/components/mdx/Img'
 import { rehypeImg } from '@/components/mdx/Img/rehypeImg'
@@ -37,9 +35,7 @@ import { rehypeLink } from '@/components/mdx/Link/rehypeLink'
 import { Keypoints, KeypointsItem } from '@/components/mdx/Keypoints'
 import { Mermaid } from '@/components/mdx/Mermaid'
 import { rehypeMermaid } from '@/components/mdx/Mermaid/rehypeMermaid'
-import { Backers, Contributors } from '@/components/mdx/People'
-import { Sandpack } from '@/components/mdx/Sandpack'
-import { rehypeSandpack } from '@/components/mdx/Sandpack/rehypeSandpack'
+import { Contributors } from '@/components/mdx/People'
 import { Summary } from '@/components/mdx/Summary'
 import { rehypeSummary } from '@/components/mdx/Summary/rehypeSummary'
 import { Toc } from '@/components/mdx/Toc'
@@ -62,7 +58,6 @@ import remarkGFM from 'remark-gfm'
  *
  * @param source - The MDX source content to compile
  * @param relFilePath - Relative file path (e.g., "/getting-started/tutorials/store.mdx")
- * @param absoluteFilePath - Absolute file path for Sandpack resolution
  * @param baseUrl - Base URL for resolving MDX URLs
  * @param title - Document title for ToC
  * @param url - Document URL for ToC
@@ -101,7 +96,6 @@ export async function compileMdxContent(
           [rehypePrismPlus, { refractor, ignoreMissing: true }],
           rehypeCode(),
           rehypeToc(tableOfContents, url, title),
-          rehypeSandpack(dirname(absoluteFilePath)),
         ],
       },
     },
@@ -111,16 +105,13 @@ export async function compileMdxContent(
         Details,
         Entries,
         Gha,
-        Grid,
         Hint,
         Img,
         Intro,
         Keypoints,
         KeypointsItem,
         Contributors,
-        Backers,
         Mermaid,
-        Sandpack,
         Summary,
         Toc,
         h1,
@@ -144,7 +135,6 @@ export async function compileMdxContent(
         img: Img,
         code,
       },
-      Codesandbox: (props) => <Codesandbox {...props} />,
       Entries: () => <Entries items={entries} />,
     },
   })

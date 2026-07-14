@@ -30,7 +30,6 @@ export type Doc = {
   metadata: DocMetadata
   image: string
   content: ReactNode
-  boxes: string[]
   tableOfContents: DocToC[]
 }
 
