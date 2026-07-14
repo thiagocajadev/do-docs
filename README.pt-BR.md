@@ -3,6 +3,8 @@
   <h1 align="center">DoDocs</h1>
   <p align="center">
     Transforme arquivos Markdown em um site de documentação.<br>
+    <a href="https://thiagocajadev.github.io/do-docs/getting-started/introduction">Acesse a documentação online</a>
+    ·
     <a href="README.md">Read in English</a>
   </p>
   <a href="https://github.com/thiagocajadev/do-docs/releases"><img src="https://img.shields.io/github/package-json/v/thiagocajadev/do-docs?style=flat-square&color=1f6feb" alt="Versão" /></a>
