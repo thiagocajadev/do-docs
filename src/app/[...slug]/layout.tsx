@@ -199,7 +199,7 @@ export default async function Layoutt({ params, children }: Props) {
           className="hover:underline"
           target="_blank"
           rel="noopener noreferrer"
-          href={`https://github.com/thiagocajadev/do-docs/releases/tag/v${version}`}
+          href="https://github.com/thiagocajadev/do-docs"
         >
           DoDocs v{version}
         </a>{' '}
