@@ -27,12 +27,11 @@ jobs:
       libname_dotsuffix_label: 'docs'
       libname_dotsuffix_href: 'https://github.com/thiagocajadev/do-docs'
       home_redirect: '/getting-started/introduction'
-      # The manual itself is written in English, so the chrome matches it.
-      locale: 'en'
-      icon: '🖨️'
-      logo: 'gutenberg.jpg'
+      # The manual is written in Portuguese, so the chrome matches it.
+      locale: 'pt-BR'
+      icon: '📘'
       github: 'https://github.com/thiagocajadev/do-docs'
-      theme_primary: '#323e48'
+      theme_primary: '#1f6feb'
       theme_scheme: 'tonalSpot'
       theme_contrast: '0'
       theme_note: '#1f6feb'

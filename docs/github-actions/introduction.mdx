@@ -1,80 +1,125 @@
 ---
-title: Reusable GitHub Actions workflow
-description: Call from your CI
+title: GitHub Actions
+description: Publicando a sua documentação no GitHub Pages.
+nav: 0
 ---
 
 <Intro>
-  This project provides a [`build.yml` reusable workflow](https://docs.github.com/en/actions/sharing-automations/reusing-workflows#calling-a-reusable-workflow) you can easily call from your own project workflow.
+  O DoDocs oferece um
+  [workflow reutilizável](https://docs.github.com/en/actions/sharing-automations/reusing-workflows#calling-a-reusable-workflow)
+  que você chama do seu próprio repositório. Não há nada para instalar: a Action baixa a imagem
+  pronta, constrói o site e publica no GitHub Pages.
 </Intro>
 
-In your `.github/workflows` folder, create a eg. `docs.yml` file:
+## O workflow
+
+No seu repositório, crie `.github/workflows/docs.yml`:
 
 ```yml
-uses: thiagocajadev/do-docs/.github/workflows/build.yml@main
-  with:
-    mdx: 'docs'
-    libname: 'React Three Fiber'
-    libname_short: 'r3f'
-    libname_dotsuffix_label: "docs"
-    libname_dotsuffix_href: "https://github.com/acme/my-project"
-    home_redirect: '/getting-started/introduction'
-    icon: '🇨🇭'
-    logo: '/logo.png'
-    github: 'https://github.com/acme/my-project'
-    discord: 'https://discord.com/channels/740090768164651008/740093168770613279'
-    theme_primary: '#323e48'
-    theme_scheme: 'tonalSpot'
-    theme_contrast: '0'
-    theme_note: '#1f6feb'
-    theme_tip: '#238636'
-    theme_important: '#8957e5'
-    theme_warning: '#d29922'
-    theme_caution: '#da3633'
+name: Docs
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: thiagocajadev/do-docs/.github/workflows/build.yml@main
+    with:
+      mdx: 'docs' # sua pasta de Markdown
+      libname: 'Meu Projeto' # nome exibido no cabeçalho
+      home_redirect: '/getting-started/introduction'
+      locale: 'pt-BR' # 'en' (padrão) ou 'pt-BR'
+      icon: '📘'
+      github: 'https://github.com/acme/meu-projeto'
+      theme_primary: '#1f6feb'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
-See [`.github/workflows/docs.yml`](https://github.com/thiagocajadev/do-docs/blob/main/.github/workflows/docs.yml) in this repository for a working example.
+Faça push na `main` e o site é publicado. A lista completa de opções está na
+[configuração](/getting-started/configuration).
 
-## Sidebar order
+<Hint>
+  O GitHub Pages precisa estar habilitado no repositório, com a origem definida como **GitHub
+  Actions** (`Settings` → `Pages` → `Source`). Sem isso, o workflow falha logo no começo.
+</Hint>
 
-By default the sidebar lists folders alphabetically (pages inside a folder are ordered by their
-`nav` frontmatter). The optional `nav_order` input takes over, in YAML.
+Veja o [`docs.yml` deste repositório](https://github.com/thiagocajadev/do-docs/blob/main/.github/workflows/docs.yml)
+para um exemplo real: é ele que publica o site que você está lendo.
 
-To simply set the order, list the folders — first one wins the top spot:
+## Ordem da barra lateral
+
+Por padrão, as pastas são listadas em ordem alfabética, e as páginas dentro de cada pasta seguem o
+`nav` do frontmatter.
+
+A entrada `nav_order` assume essa ordem. A forma mais simples é listar as pastas, e a primeira fica
+no topo:
 
 ```yml
 with:
-  nav_order: 'javascript typescript csharp sql shared'
+  nav_order: |
+    - javascript
+    - typescript
+    - csharp
+    - sql
 ```
 
-To split the sidebar into labelled groups, use one key per group. Nesting a folder under its own
-key orders that folder's children too:
+Para dividir a barra lateral em grupos com rótulo, use uma chave por grupo, e uma lista abaixo dela:
 
 ```yml
 with:
   nav_order: |
     Estrutura:
-      - getting-started
-      - shared
+      - html
+      - css
+    Programação:
+      - javascript
+      - typescript
+      - csharp
+    Banco de Dados:
+      - sql
+```
+
+Aninhar uma pasta sob a própria chave também ordena o conteúdo dela:
+
+```yml
+with:
+  nav_order: |
     Programação:
       - javascript:
           - setup
           - conventions
           - frameworks
       - typescript
-      - csharp
-    Banco de Dados: sql
 ```
 
-Names are folder/page names, as they appear in the URL (`quick-reference`, not `Quick reference`).
+Os nomes são os das pastas e páginas como aparecem na URL: `quick-reference`, não `Quick reference`.
 
-Anything you leave out keeps its default order, listed after the entries you did order — so a new
-folder still shows up in the sidebar without touching the config. The `Previous`/`Next` links at
-the bottom of each page follow the same order.
+O que você deixar de fora mantém a ordem padrão e aparece depois do que você ordenou. Ou seja, uma
+pasta nova continua surgindo na barra lateral sem você tocar na configuração. Os links de
+**Anterior** e **Próximo** no rodapé das páginas seguem essa mesma ordem.
 
-## Sidebar labels
+## Nomes exibidos
 
-Folder names are capitalized from their slug, which gets acronyms wrong: `sql` renders as `Sql`,
-`css` as `Css`. The optional `nav_labels` input sets the displayed name, keyed by slug:
+Os nomes das pastas são capitalizados a partir do slug, o que erra em siglas: `sql` vira `Sql` e
+`css` vira `Css`. A entrada `nav_labels` define o nome exibido, indexado pelo slug:
 
 ```yml
 with:
@@ -86,5 +131,11 @@ with:
     csharp: C#
 ```
 
-A slug you don't list keeps the default capitalization. Only the sidebar text changes — URLs still
-use the folder name (`/sql/readme`).
+Um slug que você não listar mantém a capitalização padrão. Só o texto da barra lateral muda: as URLs
+continuam usando o nome da pasta (`/sql/readme`).
+
+## Pastas sem página própria
+
+Uma pasta que contém páginas mas não é uma página, como `sql/conventions/`, leva o leitor para a
+primeira página dentro dela. Isso vale tanto para o clique na barra lateral quanto para um link do
+Markdown apontando para a pasta (`[conventions/](../conventions/)`), que antes resultava em 404.

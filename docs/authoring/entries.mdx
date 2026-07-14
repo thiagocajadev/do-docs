@@ -1,23 +1,22 @@
 ---
 title: "`Entries`"
-description: Display a grouped directory listing of documentation pages
+description: Lista todas as páginas do site, agrupadas por seção.
 sourcecode: docs/authoring/entries.mdx
-nav: 14
+nav: 8
 ---
 
 <Intro>
-  Displays all documentation entries in a multi-column layout, grouped by category.
+  Gera um índice de todas as páginas da documentação, agrupadas pela seção a que pertencem. Útil
+  como página inicial ou como mapa do site.
 </Intro>
-
-The `Entries` component automatically generates a directory listing of all documentation pages in the site, organized by their top-level category (first segment of the slug).
 
 ```md
 <Entries />
 ```
 
-result:
+resultado:
 
 <Entries />
 
-> [!TIP]
-> When a page includes a `<CodeSandbox>` component, the Entries listing will automatically display its thumb next to that page's link.
+A lista é montada a partir dos arquivos, então ela nunca fica desatualizada: uma página nova aparece
+aqui sozinha.

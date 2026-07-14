@@ -1,0 +1,77 @@
+---
+title: Rodando local
+description: Ver o site na sua máquina antes de publicar.
+nav: 2
+---
+
+<Intro>
+  O DoDocs é distribuído como imagem Docker. Para ver o seu site localmente, você roda a mesma
+  imagem que a GitHub Action roda, então o que você vê é o que vai ao ar.
+</Intro>
+
+## Sem instalar nada
+
+Aponte o script de preview para a sua pasta:
+
+```sh
+$ curl -sL https://raw.githubusercontent.com/thiagocajadev/do-docs/refs/heads/main/preview.sh | \
+  MDX="docs" \
+  ICON="📘" \
+  DOCKER_IMAGE="ghcr.io/thiagocajadev/do-docs:latest" \
+  sh
+```
+
+Ele constrói o site dentro do Docker e serve o resultado. Nada é instalado na sua máquina, e
+qualquer opção da [configuração](/getting-started/configuration) pode ser passada do mesmo jeito.
+
+Em `DOCKER_IMAGE`, você pode fixar qualquer versão publicada no
+[registro de containers](https://github.com/thiagocajadev/do-docs/pkgs/container/do-docs).
+
+## Rodando o Docker direto
+
+Se preferir chamar a imagem você mesmo:
+
+```sh
+$ docker run --rm --init \
+  -v "./docs":/app/docs \
+  -e MDX=docs \
+  -e DIST_DIR=docs/out \
+  -e OUTPUT=export \
+  -e NEXT_PUBLIC_LIBNAME="Meu Projeto" \
+  -e NEXT_PUBLIC_LOCALE=pt-BR \
+  -e HOME_REDIRECT=/getting-started/introduction \
+  ghcr.io/thiagocajadev/do-docs:3 pnpm run build
+```
+
+O site estático sai em `docs/out`, pronto para publicar em qualquer host.
+
+<Hint>
+  Os caminhos das variáveis são relativos a `/app`, **dentro** do container, onde a sua pasta foi
+  montada como `docs`. Por isso `MDX=docs`, e não o caminho da sua máquina.
+</Hint>
+
+## Imagens ao lado da documentação
+
+Se as suas imagens ficam numa pasta irmã da documentação, referenciadas como `../assets/foto.png`
+no Markdown, monte essa pasta também:
+
+```sh
+  -v "./docs":/app/docs \
+  -v "./assets":/app/assets \
+```
+
+A GitHub Action já faz isso sozinha.
+
+## Desenvolvendo o próprio DoDocs
+
+Se você clonou este repositório para mexer no gerador:
+
+```sh
+$ pnpm install
+$ pnpm dev
+```
+
+Um clone novo já sobe um site funcionando, usando a pasta `example/`, para você ver a estrutura
+antes de apontar para conteúdo real. Os padrões vêm do `.env.development`, que é versionado. Para
+usar a sua pasta, `MDX=./minha-doc pnpm dev`, ou sobrescreva no `.env.local`, que é ignorado pelo
+git.

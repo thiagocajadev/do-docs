@@ -1,21 +1,22 @@
 ---
 title: "`Contributors`"
-description: Display repository contributors
+description: Mostra quem contribuiu com um repositório.
 sourcecode: docs/authoring/contributors.mdx
-nav: 12
+nav: 9
 ---
 
 <Intro>
-  Display GitHub repository contributors.
+  Lista os contribuidores de um repositório do GitHub, com foto e link para o perfil.
 </Intro>
 
 ```md
 <Contributors owner="thiagocajadev" repo="do-docs" />
 ```
 
-> [!WARNING]
-> [`CONTRIBUTORS_PAT`](introduction#configuration:~:text=CONTRIBUTORS_PAT) needs to be set. Otherwise, it will display John Doe.
-
-result:
+resultado:
 
 <Contributors owner="thiagocajadev" repo="do-docs" />
+
+Os dados vêm da API do GitHub, no momento do build. Em repositórios privados, ou para evitar o
+limite de requisições anônimas, defina `CONTRIBUTORS_PAT` com um token do GitHub. A Action já passa
+o token do próprio workflow.

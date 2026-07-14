@@ -1,61 +1,35 @@
 ---
-title: "`Img`"
-description: Using images in documentation
+title: Imagens
+description: Onde colocar as imagens e como referenciá-las.
 sourcecode: docs/authoring/img.mdx
-nav: 4
+nav: 7
 ---
 
 <Intro>
-  Display images using markdown or HTML syntax with automatic dimensions and relative path support.
+  Imagens usam a sintaxe normal do Markdown. O caminho pode ser relativo ao arquivo, absoluto, ou
+  uma URL completa.
 </Intro>
 
-Relative images are supported. Eg, inside your [`MDX`](introduction#configuration:~:text=MDX) folder:
-```text {2}
-|-- authoring
-|   |-- img.mdx  <= relative to this article
-|   `-- gutenberg.jpg
-```
-
 ```md
----
-title: Authoring
----
-
-![](gutenberg.jpg)
+![Uma legenda](foto.png)
+![Uma legenda](../imagens/foto.png)
+![Uma legenda](https://exemplo.com/foto.png)
 ```
 
-result:
+O DoDocs resolve o caminho e copia a imagem para o site, então ela funciona tanto no GitHub, ao ler
+o `.md` direto no repositório, quanto no site publicado.
 
-![](gutenberg.jpg)
+## Imagens numa pasta ao lado
 
-> [!TIP]
-> You are encouraged to use relative images, since dimensions are automatically added as `img[width][height]` attributes.
->
-> For others, think about adding them to **prevent layout shift**.
+Se as suas imagens ficam numa pasta irmã da documentação, referenciadas como `../assets/foto.png`,
+a GitHub Action já monta essa pasta e copia o conteúdo.
 
----
-
-It is also possible to specify only one dimension (other is inferred from intrinsic ratio), eg:
-
-```md
-<img src="gutenberg.jpg" height="200" />
+```
+meu-projeto/
+├── docs/
+│   └── guia/pagina.md   ← ![](../../assets/foto.png)
+└── assets/
+    └── foto.png
 ```
 
-result:
-
-<img src="gutenberg.jpg" height="200" />
-
----
-
-Although it is probably better to use CSS for this:
-
-```md
-<img src="gutenberg.jpg" style={{width: 'auto', height: '10rem'}} />
-```
-
-result:
-
-<img src="gutenberg.jpg" style={{width: 'auto', height: '10rem'}} />
-
-> [!NOTE]
-> See [`MDX_BASEURL`](/getting-started/introduction#configuration:~:text=MDX_BASEURL) to understand how it is converted to a full URL.
+Rodando o Docker na mão, monte a pasta explicitamente. Veja [rodando local](/getting-started/local).

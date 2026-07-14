@@ -1,28 +1,25 @@
 ---
 title: "`Intro`"
-description: Introduction component for **documentation** pages with `code` and [links](#test)
+description: Abre uma página com um parágrafo em destaque.
 sourcecode: docs/authoring/intro.mdx
-nav: 2
+nav: 1
 ---
 
 <Intro>
-  Prominent introduction with rich markdown support.
+  O `Intro` é o parágrafo de abertura de uma página, renderizado maior que o corpo do texto. Serve
+  para dizer, em duas ou três linhas, o que a página cobre.
 </Intro>
-
-Use at the top of the document, just after the frontmatter.
 
 ```md
 <Intro>
-  This is an intro. Here you can write a long description of the article, longer than the frontmatter `description`, eventually with [links](#), lists, etc.
-  
-  Multiple paragraphs are also possible, or anything.
+  Aponte o DoDocs para uma pasta de Markdown e ele devolve um site.
 </Intro>
 ```
 
-result:
+resultado:
 
 <Intro>
-  This is an intro. Here you can write a long description of the article, longer than the frontmatter `description`, eventually with [links](#), lists, etc.
-  
-  Multiple paragraphs are also possible, or anything.
+  Aponte o DoDocs para uma pasta de Markdown e ele devolve um site.
 </Intro>
+
+Aceita Markdown dentro: **negrito**, `código` e [links](https://github.com/thiagocajadev/do-docs).

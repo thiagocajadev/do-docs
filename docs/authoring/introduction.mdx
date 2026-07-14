@@ -1,90 +1,99 @@
 ---
-title: Authoring
-description: How to write documentation
-sourcecode: docs/authoring/introduction.mdx
-nav: 1
+title: Escrevendo
+description: Frontmatter, Markdown e os componentes que o DoDocs entende.
+nav: 0
 ---
 
 <Intro>
-  This is a guide on how to write documentation. We support all [GFM](https://github.github.com/gfm/) syntax, plus some custom components that are described here.
+  O DoDocs aceita todo o [GitHub Flavored Markdown](https://github.github.com/gfm/), mais alguns
+  componentes próprios, descritos nas páginas seguintes.
 </Intro>
 
-<Keypoints>
-  <KeypointsItem>[Front matter](#frontmatter) metadatas</KeypointsItem>
-  <KeypointsItem>Custom [markdown](#markdown) components</KeypointsItem>
+<Keypoints title="Nesta página">
+  <KeypointsItem>O [frontmatter](#frontmatter) de cada página</KeypointsItem>
+  <KeypointsItem>Quando usar `.md` ou `.mdx`</KeypointsItem>
+  <KeypointsItem>Que [Markdown](#markdown) é aceito</KeypointsItem>
 </Keypoints>
 
-In your `MDX` folder, create any `path/to/my-document.mdx`:
+Na sua pasta de documentação, crie qualquer `caminho/para/documento.md`:
 
 ```md
 ---
-title: My Document
-description: Lorem ipsum...
+title: Meu documento
+description: Uma linha sobre o que ele cobre.
 nav: 0
-image: dog.png
-sourcecode: to/my-document.mdx
 ---
 
-MARKDOWN
+O conteúdo, em Markdown.
 ```
+
+O caminho do arquivo vira a URL, e a pasta vira a seção da barra lateral. Nada mais precisa ser
+registrado.
 
 ## Frontmatter
 
-Any key is optional.
+Todas as chaves são opcionais.
 
-- `title`: if not provided, last part of the path is used: `my document`
-- `description`
-- `sourcecode`: relative path to the source-code file
-- `image`:
-  - relative (to the md file) or absolute path, eg: `dog.png`, `./dog.png`, `../../dog.png`, `/dog.png` or `https://animals.com/dog.png`
-  - will be used as metadata image if provided
-- `nav`: order in the navigation (on the same level)
+- `title`: se ausente, o nome do arquivo é usado (`meu-documento` vira "Meu documento").
+- `description`: aparece abaixo do título e nos metadados de compartilhamento.
+- `nav`: ordem da página dentro da pasta. Números menores vêm primeiro. Sem `nav`, a ordem é
+  alfabética.
+- `image`: imagem usada nos metadados. Caminho relativo ao arquivo (`foto.png`, `../foto.png`),
+  absoluto (`/foto.png`) ou uma URL completa.
+- `sourcecode`: caminho do arquivo-fonte que a página descreve. Vira um link no rodapé.
 
-> [!TIP]
->
-> `nav` only orders pages. To order the folders themselves — and to split the sidebar into
-> labelled groups — use the [`nav_order`](/github-actions/introduction) workflow input.
+<Hint>
+  `nav` ordena apenas as páginas dentro de uma pasta. Para ordenar as pastas em si, e para agrupar
+  a barra lateral, use [`nav_order`](/github-actions/introduction).
+</Hint>
 
-> [!TIP]
->
-> `title` and `description` support markdown:
->
-> ```yaml
-> ---
-> title: "`Intro` component"
-> description: Introduction component for **documentation** pages with `code` and [links](#test)
-> ---
-> ```
-> ⚠️ If starting with backtick, eg ``title: "`Intro` component"`` wrap in quotes!
+`title` e `description` aceitam Markdown:
 
-## MARKDOWN
+```yaml
+---
+title: "O componente `Intro`"
+description: Abre uma página com **destaque**, aceita `código` e links
+---
+```
 
-Worth mentioning, you can use **standard HTML**, with [tailwind](https://tailwindcss.com) support:
+<Hint>
+  Se o título começar com crase, envolva em aspas. Sem elas, o YAML não entende.
+</Hint>
+
+## `.md` ou `.mdx`
+
+Os dois funcionam, na mesma pasta, misturados. A extensão decide o que o arquivo pode fazer.
+
+| Extensão | Use quando                        | O que você ganha                                            |
+| -------- | --------------------------------- | ----------------------------------------------------------- |
+| `.md`    | Markdown comum, o caso da maioria | Todo o Markdown padrão, mais HTML cru como `<details>`      |
+| `.mdx`   | Você quer componentes na página   | Tudo do `.md`, mais `<Intro>`, `<Hint>`, `<Mermaid>` e afins |
+
+Na dúvida, use `.md`. Renomeie para `.mdx` no dia em que precisar de um componente.
+
+A diferença prática: em `.md`, escrever `<div>` produz uma `div` de verdade. Em `.mdx`, uma tag com
+inicial maiúscula é lida como componente, e o HTML cru precisa ser válido para JSX.
+
+## Markdown
+
+Além do GFM, você pode usar **HTML padrão**, com suporte a [Tailwind](https://tailwindcss.com):
 
 ```md
-<div>
-  <iframe src="https://drei.pmnd.rs/iframe.html?globals=&args=&id=staging-accumulativeshadows--accumulative-shadow-st&viewMode=story" 
-    className="w-full h-60 rounded-lg"
-  />
-  <p className="mt-1 text-xs text-on-surface-variant">This is an embed iframe of [Drei's `<AccumulativeShadows>` story](https://drei.pmnd.rs/?path=/docs/staging-accumulativeshadows--docs).</p>
+<div className="rounded-lg border border-outline-variant p-4">
+  <p className="text-sm text-on-surface-variant">Uma caixa, montada na mão.</p>
 </div>
 ```
 
-result:
+resultado:
 
-<div>
-  <iframe src="https://drei.pmnd.rs/iframe.html?globals=&args=&id=staging-accumulativeshadows--accumulative-shadow-st&viewMode=story" 
-    className="w-full h-60 rounded-lg"
-  />
-  <p className="mt-1 text-xs text-on-surface-variant">This is an embed iframe of [Drei's `<AccumulativeShadows>` story](https://drei.pmnd.rs/?path=/docs/staging-accumulativeshadows--docs).</p>
+<div className="rounded-lg border border-outline-variant p-4">
+  <p className="text-sm text-on-surface-variant">Uma caixa, montada na mão.</p>
 </div>
 
-> [!TIP]
->
-> We use [react-mcu](https://github.com/abernier/react-mcu) colors, eg: `text-on-surface-variant` above
+<Hint>
+  As cores vêm do [react-mcu](https://github.com/abernier/react-mcu), geradas a partir da sua cor
+  de destaque. Por isso `text-on-surface-variant` acima funciona em tema claro e escuro sem você
+  fazer nada.
+</Hint>
 
-Plus:
-- any [GitHub Flavored Markdown](https://github.github.com/gfm/) syntax.
-- all exported [`components/mdx/index.tsx`](components/mdx/index.tsx) MDX components.
-
-See the following pages for detailed documentation on each custom component.
+As páginas seguintes documentam cada componente disponível.

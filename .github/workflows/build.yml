@@ -23,7 +23,7 @@ on:
         default: '/getting-started/introduction'
       nav_order:
         type: string
-        description: 'optional sidebar order, as YAML. Flat: `javascript csharp sql`, or grouped by label: `Programação: javascript csharp`. Folders left out keep the default (alphabetical) order, at the end'
+        description: 'optional sidebar order, as a YAML list of folder names. Group them under a label by nesting the list under a key. Folders left out keep the default (alphabetical) order, at the end'
       nav_labels:
         type: string
         description: 'optional sidebar display names, as a YAML `slug: Label` mapping, for names the default capitalization gets wrong, eg: `sql: SQL`'

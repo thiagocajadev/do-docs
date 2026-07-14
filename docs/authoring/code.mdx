@@ -1,100 +1,61 @@
 ---
-title: "`Code`"
-description: Code blocks with syntax highlighting and line numbers
+title: Código
+description: Blocos de código com destaque de sintaxe, numeração e realce de linhas.
 sourcecode: docs/authoring/code.mdx
 nav: 5
 ---
 
 <Intro>
-  Code blocks with syntax highlighting.
+  Blocos de código comuns, com destaque de sintaxe e botão de copiar. Você pode numerar as linhas e
+  realçar as que importam.
 </Intro>
 
-Line numbers/highlights are supported:
+Um bloco normal, indicando a linguagem:
+
+````md
+```sql
+SELECT id, title
+FROM docs
+WHERE published = true
+ORDER BY nav;
+```
+````
+
+resultado:
+
+```sql
+SELECT id, title
+FROM docs
+WHERE published = true
+ORDER BY nav;
+```
+
+## Numerando e realçando linhas
+
+Depois da linguagem, `showLineNumbers` numera, e `{1,4-6}` realça as linhas indicadas:
 
 ````md
 ```tsx {1,4-6} showLineNumbers
-type Props = {who: string}
+type Props = { who: string }
 
-function Hi({who}: Props) {
+function Hi({ who }: Props) {
   return (
-    <p>Hello, {who}!</p>
+    <p>Olá, {who}!</p>
   )
 }
 ```
 ````
 
-result:
+resultado:
 
 ```tsx {1,4-6} showLineNumbers
-type Props = {who: string}
+type Props = { who: string }
 
-function Hi({who}: Props) {
+function Hi({ who }: Props) {
   return (
-    <p>Hello, {who}!</p>
+    <p>Olá, {who}!</p>
   )
 }
 ```
 
----
-
-You can start at a specific `X` line number `showLineNumbers=X`:
-
-````md
-```tsx {1,4-6} showLineNumbers=150
-type Props = {who: string}
-
-function Hi({who}: Props) {
-  return (
-    <p>Hello, {who}!</p>
-  )
-}
-```
-````
-
-result:
-
-```tsx {1,4-6} showLineNumbers=150
-type Props = {who: string}
-
-function Hi({who}: Props) {
-  return (
-    <p>Hello, {who}!</p>
-  )
-}
-```
-
----
-
-`diff` format is supported:
-
-````md
-```diff
-diff --git a/example.txt b/example.txt
-index 8c3317a..47ea956 100644
---- a/example.txt
-+++ b/example.txt
-@@ -1,4 +1,4 @@
--Hello, World!
-+Hello, GitHub World!
- Here are some changes:
--This line will be modified.
-+This line has been modified.
- This line will stay the same.
-```
-````
-
-result:
-
-```diff
-diff --git a/example.txt b/example.txt
-index 8c3317a..47ea956 100644
---- a/example.txt
-+++ b/example.txt
-@@ -1,4 +1,4 @@
--Hello, World!
-+Hello, GitHub World!
- Here are some changes:
--This line will be modified.
-+This line has been modified.
- This line will stay the same.
-```
+Use o realce para apontar a linha que a prosa está explicando, em vez de descrever onde ela está.

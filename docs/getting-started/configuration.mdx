@@ -1,0 +1,77 @@
+---
+title: Configuração
+description: As opções que você passa para o DoDocs, e o que cada uma faz.
+nav: 1
+---
+
+<Intro>
+  Toda opção pode ser passada como entrada da GitHub Action (em minúsculas) ou como variável de
+  ambiente (em maiúsculas). São a mesma coisa, escrita de dois jeitos.
+</Intro>
+
+Só três opções são obrigatórias. O resto tem padrão razoável.
+
+## Essenciais
+
+| Entrada         | Variável                | O que faz                                                              |
+| --------------- | ----------------------- | --------------------------------------------------------------------- |
+| `mdx`\*         | `MDX`                   | Caminho da pasta de Markdown, relativo à raiz do repositório: `docs`   |
+| `libname`\*     | `NEXT_PUBLIC_LIBNAME`   | Nome exibido no cabeçalho                                              |
+| `home_redirect`\* | `HOME_REDIRECT`       | Página para onde a raiz (`/`) redireciona                              |
+| `locale`        | `NEXT_PUBLIC_LOCALE`    | Idioma da interface: `en` (padrão) ou `pt-BR`. Veja [Idioma](#idioma)  |
+| `icon`          | `ICON`                  | Emoji ou imagem usada como favicon: `📘` ou `/icon.png`                |
+| `logo`          | `LOGO`                  | Imagem usada nos metadados de compartilhamento                         |
+| `github`        | `GITHUB`                | URL do repositório, exibida no cabeçalho                               |
+
+## Barra lateral
+
+| Entrada      | Variável     | O que faz                                                          |
+| ------------ | ------------ | ------------------------------------------------------------------ |
+| `nav_order`  | `NAV_ORDER`  | Ordem e agrupamento das pastas. Veja [GitHub Actions](/github-actions/introduction) |
+| `nav_labels` | `NAV_LABELS` | Nomes exibidos, para os slugs que a capitalização automática erra   |
+
+## Tema
+
+O tema inteiro é derivado de uma única cor de destaque, então na prática você só precisa mexer em
+`theme_primary`.
+
+| Entrada           | Variável          | Padrão      | O que faz                                    |
+| ----------------- | ----------------- | ----------- | -------------------------------------------- |
+| `theme_primary`   | `THEME_PRIMARY`   | `#323e48`   | Cor de destaque da qual o tema é gerado      |
+| `theme_scheme`    | `THEME_SCHEME`    | `tonalSpot` | Esquema de geração das cores                 |
+| `theme_contrast`  | `THEME_CONTRAST`  | `0`         | Contraste, entre `-1` e `1`                  |
+| `theme_note`      | `THEME_NOTE`      | `#1f6feb`   | Cor do alerta `NOTE`                         |
+| `theme_tip`       | `THEME_TIP`       | `#238636`   | Cor do alerta `TIP`                          |
+| `theme_important` | `THEME_IMPORTANT` | `#8957e5`   | Cor do alerta `IMPORTANT`                    |
+| `theme_warning`   | `THEME_WARNING`   | `#d29922`   | Cor do alerta `WARNING`                      |
+| `theme_caution`   | `THEME_CAUTION`   | `#da3633`   | Cor do alerta `CAUTION`                      |
+
+Os valores de `theme_scheme` são `content`, `expressive`, `fidelity`, `monochrome`, `neutral`,
+`tonalSpot` e `vibrant`.
+
+## Build
+
+Você raramente precisa mexer nestas. A Action já as preenche.
+
+| Entrada                          | Variável                         | O que faz                                              |
+| -------------------------------- | -------------------------------- | ------------------------------------------------------ |
+| `base_path`                      | `BASE_PATH`                      | Prefixo da URL final, quando o site não está na raiz    |
+| `static_page_generation_timeout`  | `STATIC_PAGE_GENERATION_TIMEOUT` | Segundos por página. Aumente para bases grandes         |
+| `docker_tag`                     | —                                | Tag da imagem `ghcr.io/thiagocajadev/do-docs`. Padrão: `3` |
+| —                                | `DIST_DIR`                       | Pasta de saída                                          |
+| —                                | `OUTPUT`                         | `export` gera site estático                             |
+| —                                | `MDX_BASEURL`                    | URL base usada para resolver imagens relativas          |
+| —                                | `SOURCECODE_BASEURL`             | URL base do link `sourcecode:` do frontmatter           |
+| —                                | `NEXT_PUBLIC_URL`                | URL final do site publicado                             |
+| —                                | `CONTRIBUTORS_PAT`               | Token do GitHub, usado pelo componente `Contributors`   |
+
+## Idioma
+
+`locale` define o idioma da interface do DoDocs: a caixa de busca, o título "Nesta Página", os
+rótulos de anterior e próximo, o alternador de tema e o rodapé.
+
+Os valores aceitos são `en` (padrão) e `pt-BR`. Um valor desconhecido cai para o inglês, em vez de
+quebrar o build.
+
+Isso não afeta o seu conteúdo. O DoDocs renderiza o seu Markdown no idioma em que você escreveu.
+Cada site publicado tem um idioma só, definido no momento do build.

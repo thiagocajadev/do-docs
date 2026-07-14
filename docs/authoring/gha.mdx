@@ -1,46 +1,43 @@
 ---
-title: "`Gha`"
-description: GitHub-style alerts and callouts
+title: Alertas
+description: Notas, dicas e avisos no estilo do GitHub.
 sourcecode: docs/authoring/gha.mdx
-nav: 10
+nav: 4
 ---
 
 <Intro>
-  GitHub-style alerts with multiple severity levels.
+  Os [alertas do GitHub](https://github.com/orgs/community/discussions/16925) funcionam aqui, com a
+  mesma sintaxe. Cada nível tem cor e ícone próprios, derivados do seu tema.
 </Intro>
 
-Aka. ["GitHub alerts"](https://github.com/orgs/community/discussions/16925)
-
-```md
-<Gha keyword="NOTE">Highlights information that users should take into account, even when skimming.</Gha>
-```
-
-or better:
+Escreva como uma citação, começando pelo nível:
 
 ```md
 > [!NOTE]
-> Highlights information that users should take into account, even when skimming.
+> Informação que o leitor deve considerar, mesmo passando o olho.
 ```
 
-result:
+resultado:
 
 > [!NOTE]
-> Highlights information that users should take into account, even when skimming.
+> Informação que o leitor deve considerar, mesmo passando o olho.
 
----
+Os cinco níveis:
 
-We also support: `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`
-
-result:
+> [!NOTE]
+> Informação que o leitor deve considerar, mesmo passando o olho.
 
 > [!TIP]
-> Optional information to help a user be more successful.
+> Algo opcional, que ajuda o leitor a se sair melhor.
 
 > [!IMPORTANT]
-> Crucial information necessary for users to succeed.
+> Informação essencial para o leitor ter sucesso.
 
 > [!WARNING]
-> Critical content demanding immediate user attention due to potential risks.
+> Conteúdo urgente, que pede atenção imediata.
 
 > [!CAUTION]
-> Negative potential consequences of an action.
+> Risco real, com consequências negativas se ignorado.
+
+As cores de cada nível são configuráveis: veja `theme_note`, `theme_tip`, `theme_important`,
+`theme_warning` e `theme_caution` na [configuração](/getting-started/configuration).

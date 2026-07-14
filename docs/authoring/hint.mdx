@@ -1,19 +1,25 @@
 ---
-title: "`Hint` (Deprecated)"
-description: Deprecated hint component
+title: "`Hint`"
+description: Separa um aviso do texto ao redor.
 sourcecode: docs/authoring/hint.mdx
-nav: 11
+nav: 3
 ---
 
-> [!CAUTION]
-> Deprecated, use [`Gha[keyword="NOTE"]`](gha) instead.
+<Intro>
+  Destaca uma observação que o leitor não deveria passar batido, sem interromper a leitura.
+</Intro>
 
 ```md
 <Hint>
-  I'm a deprecated hint. Use `Gha` instead.
+  Lembre de definir `MDX` antes de rodar o build.
 </Hint>
 ```
 
-result:
+resultado:
 
-<Hint>I'm a deprecated hint. Use `Gha` instead.</Hint>
+<Hint>
+  Lembre de definir `MDX` antes de rodar o build.
+</Hint>
+
+Para avisos com peso semântico (nota, dica, alerta, perigo), prefira os
+[alertas do GitHub](/authoring/gha), que já vêm com cor e ícone próprios.
