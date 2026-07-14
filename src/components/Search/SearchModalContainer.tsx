@@ -1,6 +1,7 @@
 import { matchSorter } from 'match-sorter'
 import * as React from 'react'
 
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import { escape } from '@/utils/text'
 import { Command } from 'cmdk'
@@ -69,7 +70,7 @@ export const SearchModalContainer = ({
           name="search"
           id="search"
           className="bg-surface-container block h-(--Search-Input-height) w-full rounded-md px-4 pl-10 sm:text-sm"
-          placeholder="Search the docs"
+          placeholder={t('search.placeholder')}
           value={query}
           autoFocus
           onValueChange={(value) => setQuery(value)}

@@ -1,12 +1,17 @@
 'use client'
 
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { LuMonitor, LuMoon, LuSun } from 'react-icons/lu'
 
 const ORDER = ['system', 'light', 'dark'] as const
-const LABEL = { system: 'Tema do sistema', light: 'Tema claro', dark: 'Tema escuro' } as const
+const LABEL = {
+  system: t('theme.system'),
+  light: t('theme.light'),
+  dark: t('theme.dark'),
+} as const
 
 export function ToggleTheme({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme()

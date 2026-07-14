@@ -15,17 +15,19 @@ jobs:
       contents: read
       pages: write
       id-token: write
-    uses: pmndrs/docs/.github/workflows/build.yml@main
+    # Our own reusable workflow, in this repo -- so DoDocs builds its docs with DoDocs.
+    uses: ./.github/workflows/build.yml
     with:
       mdx: 'docs'
-      libname: 'Poimandres'
-      libname_short: 'pmndrs'
+      libname: 'DoDocs'
+      libname_short: 'do'
       libname_dotsuffix_label: 'docs'
-      libname_dotsuffix_href: 'https://pmnd.rs'
+      libname_dotsuffix_href: 'https://github.com/thiagocajadev/do-docs'
       home_redirect: '/getting-started/introduction'
+      locale: 'pt-BR'
       icon: '🖨️'
       logo: 'gutenberg.jpg'
-      github: 'https://github.com/pmndrs/docs'
+      github: 'https://github.com/thiagocajadev/do-docs'
       theme_primary: '#323e48'
       theme_scheme: 'tonalSpot'
       theme_contrast: '0'

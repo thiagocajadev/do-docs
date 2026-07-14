@@ -1,3 +1,4 @@
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import { getData, getDocs } from '@/utils/docs'
 
@@ -23,6 +24,9 @@ export async function generateMetadata({ params }: Props) {
       images: [{ url: image }],
       description,
       url,
+      // Repeated from the root layout: a page-level `openGraph` replaces the parent's wholesale,
+      // so leaving this out drops og:locale from every doc page.
+      locale: t('meta.ogLocale'),
       type: 'article',
     },
   }

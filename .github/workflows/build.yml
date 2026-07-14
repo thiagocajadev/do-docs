@@ -1,4 +1,4 @@
-name: Reusable pmndrs/docs workflow
+name: Reusable do-docs workflow
 
 on:
   workflow_call:
@@ -17,7 +17,6 @@ on:
         default: 'docs'
       libname_dotsuffix_href:
         type: string
-        default: 'https://docs.pmnd.rs'
       home_redirect:
         required: true
         type: string
@@ -28,6 +27,10 @@ on:
       nav_labels:
         type: string
         description: 'optional sidebar display names, as a YAML `slug: Label` mapping, for names the default capitalization gets wrong, eg: `sql: SQL`'
+      locale:
+        type: string
+        default: 'en'
+        description: 'language of the UI chrome -- search box, "On This Page", prev/next, theme toggle. One of `en`, `pt-BR`. Your MDX content is never translated'
       icon:
         type: string
         default: '🖨️'
@@ -64,10 +67,14 @@ on:
       theme_caution:
         type: string
         default: '#da3633'
+      static_page_generation_timeout:
+        type: string
+        default: '60'
+        description: 'seconds allowed per statically generated page. Raise it for large docs sets'
       docker_tag:
         type: string
         default: '3'
-        description: 'Docker image tag for ghcr.io/pmndrs/docs'
+        description: 'Docker image tag for ghcr.io/thiagocajadev/do-docs'
 
 jobs:
   build-job:
@@ -85,8 +92,14 @@ jobs:
       - run: |
           set -ex
 
+          # Images can live in a folder that sits *next to* the docs (referenced as `../assets/...`
+          # from the markdown), so mount that too. Created empty when absent, which copies nothing.
+          ASSETS="$(dirname "$MDX")/assets"
+          mkdir -p "$ASSETS"
+
           docker run --rm --init \
             -v "./$MDX":/app/docs \
+            -v "./$ASSETS":/app/assets \
             -e MDX \
             -e NEXT_PUBLIC_LIBNAME \
             -e NEXT_PUBLIC_LIBNAME_SHORT \
@@ -98,6 +111,8 @@ jobs:
             -e HOME_REDIRECT \
             -e NAV_ORDER \
             -e NAV_LABELS \
+            -e NEXT_PUBLIC_LOCALE \
+            -e STATIC_PAGE_GENERATION_TIMEOUT \
             -e MDX_BASEURL \
             -e SOURCECODE_BASEURL \
             -e EDIT_BASEURL \
@@ -115,7 +130,7 @@ jobs:
             -e THEME_WARNING \
             -e THEME_CAUTION \
             -e CONTRIBUTORS_PAT \
-            ghcr.io/pmndrs/docs:${{ inputs.docker_tag }} pnpm run build
+            ghcr.io/thiagocajadev/do-docs:${{ inputs.docker_tag }} pnpm run build
         env:
           MDX: ${{ inputs.mdx }}
           NEXT_PUBLIC_LIBNAME: ${{ inputs.libname }}
@@ -128,6 +143,8 @@ jobs:
           HOME_REDIRECT: ${{ inputs.home_redirect }}
           NAV_ORDER: ${{ inputs.nav_order }}
           NAV_LABELS: ${{ inputs.nav_labels }}
+          NEXT_PUBLIC_LOCALE: ${{ inputs.locale }}
+          STATIC_PAGE_GENERATION_TIMEOUT: ${{ inputs.static_page_generation_timeout }}
           MDX_BASEURL: 'https://github.com/${{ github.repository }}/raw/${{ github.head_ref || github.ref_name }}/${{ inputs.mdx }}'
           SOURCECODE_BASEURL: 'https://github.com/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}'
           EDIT_BASEURL: 'https://github.com/${{ github.repository }}/edit/${{ github.head_ref || github.ref_name }}/${{ inputs.mdx }}'

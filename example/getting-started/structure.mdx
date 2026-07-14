@@ -1,0 +1,57 @@
+---
+title: Structure
+description: How folders and files become the sidebar, and how to override the order.
+nav: 1
+---
+
+## Folders become sections
+
+Every folder under your `MDX` directory becomes a sidebar section, and every `.mdx` file inside it
+becomes a page. Nesting works to any depth.
+
+By default, sections and pages are ordered **alphabetically**, and their names are derived from the
+slug — `getting-started` becomes "getting started".
+
+## Overriding the order
+
+Alphabetical is rarely the order you want to *read* things in. Two optional settings fix that,
+without moving any files.
+
+`NAV_ORDER` sets the order of folders. Anything you leave out keeps the default order, at the end:
+
+```yaml
+nav_order: |
+  getting-started
+  writing
+```
+
+You can also group folders under a heading:
+
+```yaml
+nav_order: |
+  Basics:
+    - getting-started
+  Authoring:
+    - writing
+```
+
+`NAV_LABELS` fixes the names that automatic capitalization gets wrong:
+
+```yaml
+nav_labels: |
+  sql: SQL
+  getting-started: Getting Started
+```
+
+## Ordering pages within a section
+
+Inside a folder, the `nav` key in a page's frontmatter sets its position:
+
+```mdx
+---
+title: Introduction
+nav: 0
+---
+```
+
+Lower numbers come first. Pages without `nav` fall back to alphabetical order.

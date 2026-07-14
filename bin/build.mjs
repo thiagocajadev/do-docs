@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// $ node bin/build.mjs ~/code/pmndrs/react-three-fiber/docs
+// $ node bin/build.mjs ~/code/my-project/docs
 
 import minimist from 'minimist'
 import { exec as execCb, spawn } from 'node:child_process'
@@ -15,12 +15,12 @@ console.log('argv2=', argv)
 
 const help = argv.help || argv.h
 const man = `
-Usage: npm exec -y --package=@pmndrs/docs build -- MDX [ OUTDIR ] [ --libname=LIBNAME --basePath=BASE_PATH --help|-h ]
+Usage: npm exec -y --package=do-docs build -- MDX [ OUTDIR ] [ --libname=LIBNAME --basePath=BASE_PATH --help|-h ]
 
-Generate static, pmndrs-standardized documentation website from *.mdx folder.
+Generate a static documentation website from a folder of Markdown/MDX files.
 
-Example: npx @pmndrs/docs build ./docs
-         npx @pmndrs/docs build ~code/pmndrs/react-three-fiber/docs --libname="React Three Fiber" --basePath="/react-three-fiber" static-out
+Example: npx do-docs build ./docs
+         npx do-docs build ~/code/my-project/docs --libname="My Project" --basePath="/my-project" static-out
 
 Arguments:
 

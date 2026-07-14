@@ -7,6 +7,7 @@ import { ScrollToTopOnNavigate } from '@/components/ScrollToTopOnNavigate'
 import Search from '@/components/Search'
 import { Toc } from '@/components/mdx/Toc'
 import { ToggleTheme } from '@/components/ToggleTheme'
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import { getData } from '@/utils/docs'
 import { parseNavLabels, parseNavOrder } from '@/utils/navOrder'
@@ -15,6 +16,9 @@ import { PiDiscordLogoLight } from 'react-icons/pi'
 import { VscGithubAlt } from 'react-icons/vsc'
 import { type DocEntry } from './DocsContext'
 import { Menu } from './Menu'
+
+// Inlined by next.config.mjs from package.json, so the footer names the DoDocs that built the site.
+const version = process.env.DODOCS_VERSION
 
 export type Props = {
   params: Promise<{ slug: string[] }>
@@ -149,7 +153,7 @@ export default async function Layoutt({ params, children }: Props) {
                     'text-on-surface-variant/50',
                   )}
                 >
-                  Previous
+                  {t('nav.previous')}
                 </label>
                 <div className="text-xl">
                   <Link href={previousPage.url} rel="prev">
@@ -166,7 +170,7 @@ export default async function Layoutt({ params, children }: Props) {
                     'text-on-surface-variant/50',
                   )}
                 >
-                  Next
+                  {t('nav.next')}
                 </label>
                 <div className="text-xl">
                   <Link href={nextPage.url} rel="next">
@@ -185,7 +189,15 @@ export default async function Layoutt({ params, children }: Props) {
           'border-t border-outline-variant/30 pt-8 text-on-surface-variant/60',
         )}
       >
-        Desenvolvido por{' '}
+        <a
+          className="hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`https://github.com/thiagocajadev/do-docs/releases/tag/v${version}`}
+        >
+          DoDocs v{version}
+        </a>{' '}
+        · {t('footer.developedBy')}{' '}
         <a
           className="hover:underline"
           target="_blank"
@@ -194,7 +206,7 @@ export default async function Layoutt({ params, children }: Props) {
         >
           @thiagocajadev
         </a>{' '}
-        · Fork baseado no repositório{' '}
+        · {t('footer.basedOn')}{' '}
         <a
           className="hover:underline"
           target="_blank"

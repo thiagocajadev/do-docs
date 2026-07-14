@@ -4,10 +4,11 @@ main() {
   trap 'kill -9 0' SIGINT
 
   export _PORT="${_PORT:-60141}"
-  export DOCKER_IMAGE="${DOCKER_IMAGE:-ghcr.io/pmndrs/docs:latest}"
+  export DOCKER_IMAGE="${DOCKER_IMAGE:-ghcr.io/thiagocajadev/do-docs:latest}"
 
   export MDX="${MDX:-docs}"
-  export NEXT_PUBLIC_LIBNAME="${NEXT_PUBLIC_LIBNAME:-Poimandres}"
+  export NEXT_PUBLIC_LIBNAME="${NEXT_PUBLIC_LIBNAME:-DoDocs}"
+  export NEXT_PUBLIC_LOCALE="${NEXT_PUBLIC_LOCALE:-en}"
 
   rm -rf "$MDX/out"
 
@@ -20,6 +21,7 @@ main() {
     -e NEXT_PUBLIC_LIBNAME_SHORT \
     -e NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL \
     -e NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF \
+    -e NEXT_PUBLIC_LOCALE \
     -e BASE_PATH \
     -e DIST_DIR="$MDX/out$BASE_PATH" \
     -e OUTPUT=export \

@@ -1,0 +1,45 @@
+---
+title: Introduction
+description: What this example is, and how the folder you are reading became this website.
+nav: 0
+---
+
+<Intro>
+  You are looking at DoDocs rendering the `example/` folder of this repository. Everything you see
+  — the sidebar, the search, the table of contents on the right — was generated from plain Markdown
+  files. No configuration, no application code.
+</Intro>
+
+## The idea
+
+Write Markdown. Get a documentation website.
+
+DoDocs reads a folder of `.md`/`.mdx` files and produces a complete static site. The **filesystem is
+the structure**: folders become sidebar sections, files become pages. There is nothing else to wire
+up.
+
+```
+example/
+├── getting-started/
+│   ├── introduction.mdx   ← the page you are reading
+│   └── structure.mdx
+└── writing/
+    ├── markdown.mdx
+    └── components.mdx
+```
+
+That tree is exactly the sidebar on your left.
+
+## Try it
+
+Edit any file under `example/` and save. The page reloads with your change. Point `MDX` at your own
+folder and the same thing happens with your docs:
+
+```sh
+$ MDX=./my-docs pnpm dev
+```
+
+<Hint>
+  This example exists so you can see the structure working before pointing DoDocs at real content.
+  Delete it, or ignore it — it is not part of the published site unless you ask for it.
+</Hint>

@@ -1,0 +1,57 @@
+---
+title: Markdown
+description: The ordinary Markdown you already write, rendered.
+nav: 0
+---
+
+Standard Markdown works the way you expect. This page is a quick visual check that it renders.
+
+## Text
+
+**Bold**, *italic*, `inline code`, and [links](https://github.com/thiagocajadev/do-docs).
+
+> A blockquote, for when you want to set something apart.
+
+## Lists
+
+- Folders become sections
+- Files become pages
+- Frontmatter sets the title
+
+1. Write the Markdown
+2. Run the build
+3. Publish the `out/` folder
+
+## Code
+
+Fenced blocks are syntax-highlighted, and readers get a copy button:
+
+```ts
+export function greet(name: string): string {
+  return `Hello, ${name}`
+}
+```
+
+```sql
+SELECT id, title
+FROM docs
+WHERE published = true
+ORDER BY nav;
+```
+
+## Tables
+
+| Setting      | Default | What it does                    |
+| ------------ | ------- | ------------------------------- |
+| `MDX`        | —       | Path to your Markdown folder    |
+| `NEXT_PUBLIC_LOCALE` | `en` | Language of the interface  |
+| `THEME_PRIMARY` | `#323e48` | Accent color the theme is built from |
+
+## Collapsible sections
+
+<details>
+  <summary>Click to expand</summary>
+
+  Hidden until the reader asks for it — useful for long output or optional detail.
+
+</details>

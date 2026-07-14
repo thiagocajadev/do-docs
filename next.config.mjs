@@ -1,12 +1,22 @@
+import { readFileSync } from 'node:fs'
+
 const basePath = process.env.BASE_PATH || ''
 const distDir = process.env.DIST_DIR || undefined
 const output = process.env.OUTPUT || undefined
 const staticPageGenerationTimeout = Number(process.env.STATIC_PAGE_GENERATION_TIMEOUT) || 60
 
+// Stamped into the footer, so a published site says which DoDocs generated it.
+const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: false,
   staticPageGenerationTimeout,
+  // Not NEXT_PUBLIC_*: those are inlined from the real shell environment, where this is unset, and
+  // that empty value would win over the one below. The footer is a server component anyway.
+  env: {
+    DODOCS_VERSION: version,
+  },
   images: {
     // domains: ['codesandbox.io'],
     unoptimized: true,
@@ -24,73 +34,6 @@ const nextConfig = {
       {
         source: '/docs/:slug*',
         destination: '/:slug*',
-        permanent: true,
-      },
-      //
-      {
-        source: '/xr',
-        destination: '/xr/getting-started/introduction',
-        permanent: true,
-      },
-      {
-        source: '/jotai',
-        destination: 'https://jotai.pmnd.rs/docs/introduction',
-        permanent: true,
-      },
-      {
-        source: '/jotai/:slug*',
-        destination: 'https://jotai.pmnd.rs/docs/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/react-spring',
-        destination: 'https://react-spring.io',
-        permanent: true,
-      },
-      {
-        source: '/react-spring/:slug*',
-        destination: 'https://react-spring.io/#:slug*',
-        permanent: true,
-      },
-      {
-        source: '/drei',
-        destination: 'https://pmndrs.github.io/drei',
-        permanent: true,
-      },
-      {
-        source: '/drei/:slug*',
-        destination: 'https://github.com/pmndrs/drei#:slug*',
-        permanent: true,
-      },
-      //
-      {
-        source: '/react-three-fiber/:slug*',
-        destination: 'https://pmndrs.github.io/react-three-fiber/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/zustand/:slug*',
-        destination: 'https://pmndrs.github.io/zustand/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/a11y/:slug*',
-        destination: 'https://pmndrs.github.io/react-three-a11y/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/react-postprocessing/:slug*',
-        destination: 'https://pmndrs.github.io/react-postprocessing/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/uikit/:slug*',
-        destination: 'https://pmndrs.github.io/uikit/docs/:slug*',
-        permanent: true,
-      },
-      {
-        source: '/xr/:slug*',
-        destination: 'https://pmndrs.github.io/xr/docs/:slug*',
         permanent: true,
       },
     ]

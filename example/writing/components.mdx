@@ -1,0 +1,57 @@
+---
+title: Components
+description: The extras MDX gives you on top of plain Markdown.
+nav: 1
+---
+
+<Intro>
+  Because pages are MDX, not just Markdown, you can drop in components where prose is not enough.
+  These are the ones you will reach for most.
+</Intro>
+
+<Keypoints title="On this page">
+  <KeypointsItem>`Intro` — the lead paragraph of a page</KeypointsItem>
+  <KeypointsItem>`Keypoints` — a summary of what the page covers</KeypointsItem>
+  <KeypointsItem>`Hint` — an aside the reader should not miss</KeypointsItem>
+</Keypoints>
+
+## Intro
+
+Opens a page with a lead paragraph, styled larger than body text:
+
+```mdx
+<Intro>
+  A static documentation generator. Point it at Markdown, get a website.
+</Intro>
+```
+
+## Keypoints
+
+Lists what an article covers, usually right after the `Intro`:
+
+```mdx
+<Keypoints title="What you'll learn">
+  <KeypointsItem>First item</KeypointsItem>
+  <KeypointsItem>Second **item**</KeypointsItem>
+</Keypoints>
+```
+
+## Hint
+
+Sets an aside apart from the surrounding prose:
+
+```mdx
+<Hint>
+  Remember to set `MDX` before running the build.
+</Hint>
+```
+
+<Hint>
+  Like this one.
+</Hint>
+
+## And the rest
+
+`Grid`, `Mermaid` diagrams, `Sandpack` live editors, `Codesandbox` embeds, and GitHub-style
+callouts are all available. The full catalog lives in the DoDocs documentation itself, under
+**authoring**.

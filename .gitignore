@@ -12,13 +12,13 @@ node_modules/
 # environment
 .env.local
 .env*.local
+*.bak
 
 # other
 .next/
 next-env.d.ts
 .DS_Store
 .secrets
-tmp/api-backup
 
 build/
 dist/
@@ -28,16 +28,3 @@ tmp/
 temp/
 
 tsconfig.tsbuildinfo
-
-# Playwright
-test-results/
-playwright-report/
-playwright/.cache/
-
-# Chromatic
-chromatic-archives/
-
-*storybook.log
-*archive.log
-storybook-static
-src/stories

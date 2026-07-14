@@ -1,5 +1,6 @@
 'use client'
 
+import { t } from '@/i18n'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { usePathname } from 'next/navigation'
@@ -16,13 +17,13 @@ export function Menu({ children, ...props }: ComponentProps<typeof Dialog.Conten
 
   return (
     <Dialog.Root open={opened} onOpenChange={setOpened}>
-      <Dialog.Trigger aria-label="Menu">
+      <Dialog.Trigger aria-label={t('nav.menu')}>
         <Burger opened={opened} className="lg:hidden" />
       </Dialog.Trigger>
       <Dialog.Content {...props}>
         <VisuallyHidden.Root>
-          <Dialog.Title>Menu</Dialog.Title>
-          <Dialog.Description>Navegação do site</Dialog.Description>
+          <Dialog.Title>{t('nav.menu')}</Dialog.Title>
+          <Dialog.Description>{t('nav.menuDescription')}</Dialog.Description>
         </VisuallyHidden.Root>
         {children}
       </Dialog.Content>

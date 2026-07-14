@@ -1,3 +1,4 @@
+import { resolveLocale, t } from '@/i18n'
 import cn from '@/lib/cn'
 import { svg } from '@/utils/icon'
 import resolveMdxUrl from '@/utils/resolveMdxUrl'
@@ -61,7 +62,7 @@ const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL
 const NEXT_PUBLIC_LIBNAME = process.env.NEXT_PUBLIC_LIBNAME
 
 const title = NEXT_PUBLIC_LIBNAME
-const description = `Documentation for ${NEXT_PUBLIC_LIBNAME}`
+const description = t('meta.description')(NEXT_PUBLIC_LIBNAME ?? '')
 const url = NEXT_PUBLIC_URL
 const siteName = NEXT_PUBLIC_LIBNAME
 
@@ -87,7 +88,7 @@ if (process.env.ICON) {
 export const metadata: Metadata = {
   metadataBase: NEXT_PUBLIC_URL ? new URL(NEXT_PUBLIC_URL) : undefined,
   title,
-  description: `Documentation for ${NEXT_PUBLIC_LIBNAME}`,
+  description,
   icons: {
     icon,
   },
@@ -96,7 +97,7 @@ export const metadata: Metadata = {
     description,
     url,
     siteName,
-    locale: 'en_US',
+    locale: t('meta.ogLocale'),
     type: 'website',
   },
 }
@@ -125,7 +126,7 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang={resolveLocale()}
       suppressHydrationWarning
       className={`${inter.variable} ${inconsolata.variable}`}
     >

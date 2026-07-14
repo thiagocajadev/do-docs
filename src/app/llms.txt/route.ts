@@ -20,22 +20,6 @@ ${docs
   })
   .join('\n')}
 
-## MCP Server
-
-This documentation is available via Model Context Protocol (MCP) server at https://docs.pmnd.rs/api/mcp
-
-Configure in your MCP client:
-\`\`\`json
-{
-  "mcpServers": {
-    "pmndrs": {
-      "type": "http",
-      "url": "https://docs.pmnd.rs/api/mcp"
-    }
-  }
-}
-\`\`\`
-
 ---
 
 For full documentation content, see llms-full.txt

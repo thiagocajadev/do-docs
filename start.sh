@@ -5,10 +5,11 @@ rm -rf out
 export _PORT=60141
 
 export MDX=docs
-export NEXT_PUBLIC_LIBNAME="Poimandres"
-export NEXT_PUBLIC_LIBNAME_SHORT="pmndrs"
+export NEXT_PUBLIC_LIBNAME="DoDocs"
+export NEXT_PUBLIC_LIBNAME_SHORT="do"
 export NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL="docs"
-export NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF="https://docs.pmnd.rs"
+export NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF="https://github.com/thiagocajadev/do-docs"
+export NEXT_PUBLIC_LOCALE="pt-BR"
 export BASE_PATH=
 export DIST_DIR=
 export OUTPUT=export
@@ -19,7 +20,7 @@ export EDIT_BASEURL=
 export NEXT_PUBLIC_URL=
 export ICON=
 export LOGO=gutenberg.jpg
-export GITHUB=https://github.com/pmndrs/docs
+export GITHUB=https://github.com/thiagocajadev/do-docs
 export DISCORD=https://discord.com/channels/740090768164651008/1264328004172255393
 export THEME_PRIMARY="#323e48"
 export THEME_SCHEME="tonalSpot"

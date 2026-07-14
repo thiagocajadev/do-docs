@@ -10,17 +10,17 @@ description: Call from your CI
 In your `.github/workflows` folder, create a eg. `docs.yml` file:
 
 ```yml
-uses: pmndrs/docs/.github/workflows/build.yml@v2
+uses: thiagocajadev/do-docs/.github/workflows/build.yml@main
   with:
     mdx: 'docs'
     libname: 'React Three Fiber'
     libname_short: 'r3f'
     libname_dotsuffix_label: "docs"
-    libname_dotsuffix_href: "https://docs.pmnd.rs"
+    libname_dotsuffix_href: "https://github.com/acme/my-project"
     home_redirect: '/getting-started/introduction'
     icon: '🇨🇭'
     logo: '/logo.png'
-    github: 'https://github.com/pmndrs/react-three-fiber'
+    github: 'https://github.com/acme/my-project'
     discord: 'https://discord.com/channels/740090768164651008/740093168770613279'
     theme_primary: '#323e48'
     theme_scheme: 'tonalSpot'
@@ -32,7 +32,7 @@ uses: pmndrs/docs/.github/workflows/build.yml@v2
     theme_caution: '#da3633'
 ```
 
-See [`pmndrs/react-three-fiber/.github/workflows/docs.yml`](https://github.com/pmndrs/react-three-fiber/blob/master/.github/workflows/docs.yml) for an example implementation.
+See [`.github/workflows/docs.yml`](https://github.com/thiagocajadev/do-docs/blob/main/.github/workflows/docs.yml) in this repository for a working example.
 
 ## Sidebar order
 

@@ -1,6 +1,7 @@
 'use client'
 
 import Icon from '@/components/Icon'
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
@@ -32,7 +33,7 @@ function Search({
       <Dialog.Portal>
         <Dialog.Content className="fixed inset-0 z-50">
           <VisuallyHidden.Root>
-            <Dialog.Title>Search anything</Dialog.Title>
+            <Dialog.Title>{t('search.dialogTitle')}</Dialog.Title>
           </VisuallyHidden.Root>
 
           <Dialog.Overlay className="absolute inset-0 bg-surface-dim/95">
@@ -63,17 +64,17 @@ export function SearchButton({ className, ...props }: ComponentProps<'span'>) {
     >
       <Icon icon="search" className="size-6" />
       <span>
-        Search
-        <span className="hidden sm:inline"> for anything</span>
+        {t('search.label')}
+        <span className="hidden sm:inline">{t('search.labelSuffix')}</span>
       </span>
       <span className="ml-auto hidden rounded-md border px-1.5 py-0.5 text-sm leading-5 sm:block">
-        <span className="sr-only">Press </span>
+        <span className="sr-only">{t('search.pressPrefix')}</span>
         <kbd>
-          <kbd title="Forward slash" className="no-underline">
+          <kbd title={t('search.slashKey')} className="no-underline">
             /
           </kbd>
         </kbd>
-        <span className="sr-only"> to search</span>
+        <span className="sr-only">{t('search.pressSuffix')}</span>
       </span>
     </span>
   )

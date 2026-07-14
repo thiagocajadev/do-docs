@@ -20,15 +20,9 @@ jobs:
 
     permissions:
       contents: write
-      pull-requests: write
       packages: write
       attestations: write
       id-token: write
-
-    # Update the Production/Preview environment with the Vercel deployed URL
-    environment:
-      name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}
-      url: ${{ steps.vercel-deploy.outputs.deployment_url }}
 
     steps:
       #
@@ -50,28 +44,32 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       #
-      #  ██████ ██   ██  █████  ███    ██  ██████  ███████ ███████ ███████ ████████
-      # ██      ██   ██ ██   ██ ████   ██ ██       ██      ██      ██         ██
-      # ██      ███████ ███████ ██ ██  ██ ██   ███ █████   ███████ █████      ██
-      # ██      ██   ██ ██   ██ ██  ██ ██ ██    ██ ██           ██ ██         ██
-      #  ██████ ██   ██ ██   ██ ██   ████  ██████  ███████ ███████ ███████    ██
+      # ████████ ███████ ███████ ████████
+      #    ██    ██      ██         ██
+      #    ██    █████   ███████    ██
+      #    ██    ██           ██    ██
+      #    ██    ███████ ███████    ██
       #
 
-      - name: Create Release Pull Request or Publish
-        id: changesets
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: changesets/action@v1
-        with:
-          publish: pnpm run release # dummy release
-          createGithubReleases: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm test
+
+      #
+      # ██    ██ ███████ ██████  ███████ ██  ██████  ███    ██
+      # ██    ██ ██      ██   ██ ██      ██ ██    ██ ████   ██
+      # ██    ██ █████   ██████  ███████ ██ ██    ██ ██ ██  ██
+      #  ██  ██  ██      ██   ██      ██ ██ ██    ██ ██  ██ ██
+      #   ████   ███████ ██   ██ ███████ ██  ██████  ██   ████
+      #
+      # Releases are cut by bumping `version` in package.json: the check below detects it, and the
+      # Docker publish + git tags are gated on it. Every other push just builds and tests.
+      #
 
       - name: Check version bump
         id: check
         uses: EndBug/version-check@v2
         with:
           diff-search: true
+
       - id: get-version
         if: steps.check.outputs.changed == 'true'
         run: |
@@ -84,58 +82,13 @@ jobs:
           echo "Using version: $VERSION (major: $MAJOR_VERSION)"
 
       #
-      # ██    ██ ███████ ██████   ██████ ███████ ██
-      # ██    ██ ██      ██   ██ ██      ██      ██
-      # ██    ██ █████   ██████  ██      █████   ██
-      #  ██  ██  ██      ██   ██ ██      ██      ██
-      #   ████   ███████ ██   ██  ██████ ███████ ███████
-      #
-      # Whatever "published", we deploy to Vercel (preview for PRs, production for main)
-      #
-
-      - id: vercel-deploy
-        run: |
-          npx -y vercel deploy --token=${{ secrets.VERCEL_TOKEN }} \
-            --target=${{ github.event_name == 'push' && 'production' || 'preview' }} \
-            --build-env MDX=docs \
-            --build-env NEXT_PUBLIC_LIBNAME="Poimandres" \
-            --build-env NEXT_PUBLIC_LIBNAME_SHORT="pmndrs" \
-            --build-env NEXT_PUBLIC_LIBNAME_DOTSUFFIX_LABEL="docs" \
-            --build-env NEXT_PUBLIC_LIBNAME_DOTSUFFIX_HREF="https://pmnd.rs" \
-            --build-env BASE_PATH= \
-            --build-env DIST_DIR= \
-            --build-env OUTPUT= \
-            --build-env HOME_REDIRECT= \
-            --build-env MDX_BASEURL="https://github.com/${{ github.repository }}/raw/${{ github.head_ref || github.ref_name }}/docs" \
-            --build-env EDIT_BASEURL="https://github.com/${{ github.repository }}/edit/${{ github.head_ref || github.ref_name }}/docs" \
-            --build-env SOURCECODE_BASEURL="https://github.com/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}" \
-            --build-env NEXT_PUBLIC_URL= \
-            --build-env ICON= \
-            --build-env LOGO=gutenberg.jpg \
-            --build-env GITHUB="https://github.com/${{ github.repository }}" \
-            --build-env DISCORD="${{ secrets.DISCORD }}" \
-            --build-env THEME_PRIMARY="#323e48" \
-            --build-env THEME_SCHEME="tonalSpot" \
-            --build-env THEME_CONTRAST="0" \
-            --build-env THEME_NOTE="#1f6feb" \
-            --build-env THEME_TIP="#238636" \
-            --build-env THEME_IMPORTANT="#8957e5" \
-            --build-env THEME_WARNING="#d29922" \
-            --build-env THEME_CAUTION="#da3633" \
-            --build-env CONTRIBUTORS_PAT="${{ secrets.GITHUB_TOKEN }}" \
-            > deployment-url.txt
-
-          echo "deployment_url=$(cat deployment-url.txt)" >> $GITHUB_OUTPUT
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      #
       # ██████   ██████   ██████ ██   ██ ███████ ██████
       # ██   ██ ██    ██ ██      ██  ██  ██      ██   ██
       # ██   ██ ██    ██ ██      █████   █████   ██████
       # ██   ██ ██    ██ ██      ██  ██  ██      ██   ██
       # ██████   ██████   ██████ ██   ██ ███████ ██   ██
+      #
+      # The image IS the product: the reusable build.yml runs it to render anyone's docs.
       #
 
       - uses: docker/login-action@v3
@@ -151,7 +104,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
             type=raw,value=latest
             type=raw,value=${{ steps.get-version.outputs.major_version }}
             type=raw,value=${{ steps.get-version.outputs.version }}
@@ -160,7 +112,7 @@ jobs:
         id: push
         with:
           context: .
-          # Push only if a new version was published
+          # Always build, so a broken Dockerfile fails the PR. Only push on a version bump.
           push: ${{ steps.check.outputs.changed == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -178,14 +130,11 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
-          # Set version variables
           VERSION=${{ steps.get-version.outputs.version }}
           MAJOR_VERSION=${{ steps.get-version.outputs.major_version }}
 
-          # vX.Y.Z tag
+          # vX.Y.Z pins a release; vX is what build.yml's `docker_tag` default tracks.
           git tag -fa v$VERSION -m "Update version tag to v$VERSION"
-
-          # vX tag
           git tag -fa v$MAJOR_VERSION -m "Update major version tag to v$MAJOR_VERSION"
 
           git push origin v$MAJOR_VERSION v$VERSION --force

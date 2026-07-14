@@ -1,6 +1,7 @@
 'use client'
 
 import type { DocToC } from '@/app/[...slug]/DocsContext'
+import { t } from '@/i18n'
 import cn from '@/lib/cn'
 import { ComponentProps, useCallback, useEffect, useState } from 'react'
 
@@ -53,7 +54,7 @@ export function Toc({ className, toc }: ComponentProps<'div'> & { toc: DocToC[] 
     <div className={cn(className, 'text-xs')}>
       {toc.length > 0 && (
         <p className="mb-3 font-semibold uppercase tracking-wide text-on-surface-variant/50">
-          On This Page
+          {t('toc.title')}
         </p>
       )}
       {toc.map(({ title, id, level }, index) => (
